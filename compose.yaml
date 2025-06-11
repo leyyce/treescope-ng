@@ -1,7 +1,7 @@
 services:
   db:
     container_name: db
-    image: postgres:17
+    image: postgis/postgis
     ports:
       - "5432:5432"
     restart: unless-stopped
