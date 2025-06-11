@@ -10,7 +10,10 @@ import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
 
 type RegisterForm = {
-    name: string;
+    username: string;
+    first_name: string;
+    last_name: string;
+    step_length: number;
     email: string;
     password: string;
     password_confirmation: string;
@@ -18,7 +21,10 @@ type RegisterForm = {
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
-        name: '',
+        username: '',
+        first_name: '',
+        last_name: '',
+        step_length: 75,
         email: '',
         password: '',
         password_confirmation: '',
@@ -37,20 +43,69 @@ export default function Register() {
             <form className="flex flex-col gap-6" onSubmit={submit}>
                 <div className="grid gap-6">
                     <div className="grid gap-2">
-                        <Label htmlFor="name">Name</Label>
+                        <Label htmlFor="username">Username</Label>
                         <Input
-                            id="name"
+                            id="username"
                             type="text"
                             required
                             autoFocus
                             tabIndex={1}
-                            autoComplete="name"
-                            value={data.name}
-                            onChange={(e) => setData('name', e.target.value)}
+                            autoComplete="username"
+                            value={data.username}
+                            onChange={(e) => setData('username', e.target.value)}
                             disabled={processing}
-                            placeholder="Full name"
+                            placeholder="JaneDoe123"
                         />
-                        <InputError message={errors.name} className="mt-2" />
+                        <InputError message={errors.username} className="mt-2" />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="first_name">First Name</Label>
+                        <Input
+                            id="first_name"
+                            type="text"
+                            required
+                            tabIndex={2}
+                            autoComplete="first-name"
+                            value={data.first_name}
+                            onChange={(e) => setData('first_name', e.target.value)}
+                            disabled={processing}
+                            placeholder="Jane"
+                        />
+                        <InputError message={errors.first_name} className="mt-2" />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="last_name">Last Name</Label>
+                        <Input
+                            id="last_name"
+                            type="text"
+                            required
+                            tabIndex={3}
+                            autoComplete="last-name"
+                            value={data.last_name}
+                            onChange={(e) => setData('last_name', e.target.value)}
+                            disabled={processing}
+                            placeholder="Doe"
+                        />
+                        <InputError message={errors.last_name} className="mt-2" />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="step_lenght">Step Length</Label>
+                        <Input
+                            id="step_lenght"
+                            type="number"
+                            required
+                            min={50}
+                            max={100}
+                            tabIndex={4}
+                            // value={data.step_length}
+                            onChange={(e) => setData('step_length', Number(e.target.value))}
+                            disabled={processing}
+                            placeholder="in cm"
+                        />
+                        <InputError message={errors.step_length} className="mt-2" />
                     </div>
 
                     <div className="grid gap-2">
@@ -59,7 +114,7 @@ export default function Register() {
                             id="email"
                             type="email"
                             required
-                            tabIndex={2}
+                            tabIndex={5}
                             autoComplete="email"
                             value={data.email}
                             onChange={(e) => setData('email', e.target.value)}
@@ -75,7 +130,7 @@ export default function Register() {
                             id="password"
                             type="password"
                             required
-                            tabIndex={3}
+                            tabIndex={6}
                             autoComplete="new-password"
                             value={data.password}
                             onChange={(e) => setData('password', e.target.value)}
@@ -91,7 +146,7 @@ export default function Register() {
                             id="password_confirmation"
                             type="password"
                             required
-                            tabIndex={4}
+                            tabIndex={7}
                             autoComplete="new-password"
                             value={data.password_confirmation}
                             onChange={(e) => setData('password_confirmation', e.target.value)}
@@ -109,7 +164,7 @@ export default function Register() {
 
                 <div className="text-center text-sm text-muted-foreground">
                     Already have an account?{' '}
-                    <TextLink href={route('login')} tabIndex={6}>
+                    <TextLink href={route('login')} tabIndex={8}>
                         Log in
                     </TextLink>
                 </div>

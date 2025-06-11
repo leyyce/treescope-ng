@@ -20,7 +20,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 type ProfileForm = {
-    name: string;
+    username: string;
+    first_name: string;
+    last_name: string;
+    step_length: number;
     email: string;
 };
 
@@ -28,7 +31,10 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
     const { auth } = usePage<SharedData>().props;
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm<Required<ProfileForm>>({
-        name: auth.user.name,
+        username: auth.user.username,
+        first_name: auth.user.first_name,
+        last_name: auth.user.last_name,
+        step_length: auth.user.step_length,
         email: auth.user.email,
     });
 
@@ -50,19 +56,69 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
 
                     <form onSubmit={submit} className="space-y-6">
                         <div className="grid gap-2">
-                            <Label htmlFor="name">Name</Label>
+                            <Label htmlFor="username">Username</Label>
 
                             <Input
-                                id="name"
+                                id="username"
                                 className="mt-1 block w-full"
-                                value={data.name}
-                                onChange={(e) => setData('name', e.target.value)}
+                                value={data.username}
+                                onChange={(e) => setData('username', e.target.value)}
                                 required
-                                autoComplete="name"
-                                placeholder="Full name"
+                                autoComplete="username"
+                                placeholder={auth.user.username}
                             />
 
-                            <InputError className="mt-2" message={errors.name} />
+                            <InputError className="mt-2" message={errors.username} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="first_name">First Name</Label>
+
+                            <Input
+                                id="first_name"
+                                className="mt-1 block w-full"
+                                value={data.first_name}
+                                onChange={(e) => setData('first_name', e.target.value)}
+                                required
+                                autoComplete="first-name"
+                                placeholder={auth.user.first_name}
+                            />
+
+                            <InputError className="mt-2" message={errors.first_name} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="last_name">Last Name</Label>
+
+                            <Input
+                                id="last_name"
+                                className="mt-1 block w-full"
+                                value={data.last_name}
+                                onChange={(e) => setData('last_name', e.target.value)}
+                                required
+                                autoComplete="last-name"
+                                placeholder={auth.user.last_name}
+                            />
+
+                            <InputError className="mt-2" message={errors.last_name} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="step_lenght">Step Length</Label>
+
+                            <Input
+                                id="step_lenght"
+                                className="mt-1 block w-full"
+                                type="number"
+                                min={50}
+                                max={100}
+                                value={data.step_length}
+                                onChange={(e) => setData('step_length', Number(e.target.value))}
+                                required
+                                placeholder={auth.user.step_length.toString() + ' cm'}
+                            />
+
+                            <InputError className="mt-2" message={errors.step_length} />
                         </div>
 
                         <div className="grid gap-2">
