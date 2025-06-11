@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->foreignId(\App\Models\TrustLevel::class)->default(1);
+            $table->foreignIdFor(\App\Models\TrustLevel::class)->default(1);
             $table->magellanPoint('home_location')->nullable();
             $table->unsignedInteger('step_length');
             $table->unsignedInteger('xp')->default(0);

@@ -11,6 +11,11 @@ class TrustLevel extends Model
     /** @use HasFactory<\Database\Factories\TrustLevelFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'description',
+    ];
+
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
