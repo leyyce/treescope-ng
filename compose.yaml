@@ -1,0 +1,21 @@
+services:
+  db:
+    container_name: db
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${DB_DATABASE}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+  mailer:
+    container_name: mailer
+    image: maildev/maildev
+    ports:
+      - "1080:1080"
+    restart: unless-stopped
+volumes:
+  pg_data: {}
