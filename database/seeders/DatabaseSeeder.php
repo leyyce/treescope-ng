@@ -16,6 +16,9 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             TrustLevelSeeder::class,
             UserSeeder::class,
+            TreeTypeSeeder::class,
+            HealthStatusSeeder::class,
+            TreeSeeder::class,
         ]);
     }
 }

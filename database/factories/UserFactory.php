@@ -33,7 +33,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
-            'trust_level_id' => (TrustLevel::inRandomOrder()->first() ?? TrustLevel::factory()->create())->id,
+            'trust_level_id' => TrustLevel::inRandomOrder()->first() ?? TrustLevel::factory()->create(),
             'home_location' => Point::makeGeodetic(fake()->longitude(), fake()->latitude()),
             'step_length' => fake()->numberBetween(20, 100),
             'xp' => fake()->numberBetween(0, 10000),
