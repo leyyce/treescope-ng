@@ -67,6 +67,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function trees(): HasMany
     {
-        return $this->hasMany(Tree::class, 'creator_id');
+        return $this->hasMany(Tree::class);
     }
 }

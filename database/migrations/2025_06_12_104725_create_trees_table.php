@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('trees', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\User::class, 'creator_id')->constrained()->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\User::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(\App\Models\TreeType::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(\App\Models\HealthStatus::class)->constrained()->onDelete('cascade');
             $table->magellanPoint('location');

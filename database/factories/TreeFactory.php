@@ -21,7 +21,7 @@ class TreeFactory extends Factory
     public function definition(): array
     {
         return [
-            'creator_id' => User::inRandomOrder()->first() ?? User::factory()->create(),
+            'user_id' => User::inRandomOrder()->first() ?? User::factory()->create(),
             'tree_type_id' => TreeType::inRandomOrder()->first() ?? TreeType::factory()->create(),
             'health_status_id' => HealthStatus::inRandomOrder()->first() ?? HealthStatus::factory()->create(),
             'location' => Point::makeGeodetic(fake()->longitude(), fake()->latitude()),
