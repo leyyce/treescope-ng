@@ -70,4 +70,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Tree::class);
     }
+
+    public function measurements(): HasMany
+    {
+        return $this->hasMany(Measurement::class);
+    }
+
+    public function treePhotos(): HasMany
+    {
+        return $this->hasMany(TreePhoto::class);
+    }
 }

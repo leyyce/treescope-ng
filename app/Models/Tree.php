@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Tree extends Model
 {
@@ -27,5 +29,15 @@ class Tree extends Model
     public function healthStatus(): BelongsTo
     {
         return $this->belongsTo(HealthStatus::class);
+    }
+
+    public function measurements(): HasMany
+    {
+        return $this->hasMany(Measurement::class);
+    }
+
+    public function treePhotos(): HasManyThrough
+    {
+        return $this->hasManyThrough(TreePhoto::class, Measurement::class);
     }
 }
