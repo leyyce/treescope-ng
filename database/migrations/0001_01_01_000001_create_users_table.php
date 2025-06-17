@@ -11,15 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('trust_levels', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('name');
+            $table->string('description');
+            $table->timestamps();
+        });
+
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('username')->unique();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->foreignIdFor(\App\Models\TrustLevel::class)->default(1);
+
+            $defaultTrustLevel = \App\Models\TrustLevel::where('name', 'Untrusted')->first();
+
+            $table->foreignUuid('trust_level_id')->default($defaultTrustLevel);
             $table->magellanPoint('home_location')->nullable();
             $table->unsignedInteger('step_length');
             $table->unsignedInteger('xp')->default(0);
@@ -49,6 +59,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
+        Schema::dropIfExists('trust_levels');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }

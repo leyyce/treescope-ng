@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('measurements', function (Blueprint $table) {
-            $table->id();
-            $table->foreignIdFor(\App\Models\Tree::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(\App\Models\User::class)->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('tree_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->decimal('height', 5);
             $table->unsignedTinyInteger('inclination');
             $table->unsignedInteger('trunk_diameter');

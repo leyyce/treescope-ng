@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('trees', function (Blueprint $table) {
-            $table->id();
-            $table->foreignIdFor(\App\Models\User::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(\App\Models\TreeType::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(\App\Models\HealthStatus::class)->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('tree_type_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('health_status_id')->constrained()->onDelete('cascade');
             $table->magellanPoint('location');
             $table->timestamps();
         });
