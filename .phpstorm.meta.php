@@ -1177,7 +1177,7 @@ namespace PHPSTORM_META {
             'hashing.rehash_on_login' => 'boolean',
             'view.paths' => 'array',
             'view.compiled' => 'string',
-            'debugbar.enabled' => 'NULL',
+            'debugbar.enabled' => 'boolean',
             'debugbar.hide_empty_tabs' => 'boolean',
             'debugbar.except' => 'array',
             'debugbar.storage.enabled' => 'boolean',
@@ -1684,7 +1684,7 @@ namespace PHPSTORM_META {
             'hashing.rehash_on_login' => 'boolean',
             'view.paths' => 'array',
             'view.compiled' => 'string',
-            'debugbar.enabled' => 'NULL',
+            'debugbar.enabled' => 'boolean',
             'debugbar.hide_empty_tabs' => 'boolean',
             'debugbar.except' => 'array',
             'debugbar.storage.enabled' => 'boolean',
@@ -2191,7 +2191,7 @@ namespace PHPSTORM_META {
             'hashing.rehash_on_login' => 'boolean',
             'view.paths' => 'array',
             'view.compiled' => 'string',
-            'debugbar.enabled' => 'NULL',
+            'debugbar.enabled' => 'boolean',
             'debugbar.hide_empty_tabs' => 'boolean',
             'debugbar.except' => 'array',
             'debugbar.storage.enabled' => 'boolean',
@@ -2462,7 +2462,8 @@ namespace PHPSTORM_META {
 'appearance','register','login',
 'password.request','password.email','password.reset','password.store','verification.notice',
 'verification.verify','verification.send','password.confirm','logout',
-'storage.local',);
+'trees.index','trees.create','trees.store','trees.show','trees.edit',
+'trees.update','trees.destroy','storage.local',);
         registerArgumentsSet('views', 
 'app','laravel-exceptions-renderer::components.card','laravel-exceptions-renderer::components.context','laravel-exceptions-renderer::components.editor','laravel-exceptions-renderer::components.header',
 'laravel-exceptions-renderer::components.icons.chevron-down','laravel-exceptions-renderer::components.icons.chevron-up','laravel-exceptions-renderer::components.icons.computer-desktop','laravel-exceptions-renderer::components.icons.moon','laravel-exceptions-renderer::components.icons.sun',
@@ -2503,16 +2504,17 @@ namespace PHPSTORM_META {
 'validation.string','validation.timezone','validation.unique','validation.uploaded','validation.uppercase',
 'validation.url','validation.ulid','validation.uuid','validation.custom.attribute-name.rule-name',);
         registerArgumentsSet('env', 
-'APP_NAME','APP_ENV','APP_KEY','APP_DEBUG','APP_URL',
-'APP_LOCALE','APP_FALLBACK_LOCALE','APP_FAKER_LOCALE','APP_MAINTENANCE_DRIVER','PHP_CLI_SERVER_WORKERS',
-'BCRYPT_ROUNDS','LOG_CHANNEL','LOG_STACK','LOG_DEPRECATIONS_CHANNEL','LOG_LEVEL',
-'DB_CONNECTION','DB_HOST','DB_PORT','DB_DATABASE','DB_USERNAME',
-'DB_PASSWORD','SESSION_DRIVER','SESSION_LIFETIME','SESSION_ENCRYPT','SESSION_PATH',
-'SESSION_DOMAIN','BROADCAST_CONNECTION','FILESYSTEM_DISK','QUEUE_CONNECTION','CACHE_STORE',
-'MEMCACHED_HOST','REDIS_CLIENT','REDIS_HOST','REDIS_PASSWORD','REDIS_PORT',
-'MAIL_MAILER','MAIL_SCHEME','MAIL_HOST','MAIL_PORT','MAIL_USERNAME',
-'MAIL_PASSWORD','MAIL_FROM_ADDRESS','MAIL_FROM_NAME','AWS_ACCESS_KEY_ID','AWS_SECRET_ACCESS_KEY',
-'AWS_DEFAULT_REGION','AWS_BUCKET','AWS_USE_PATH_STYLE_ENDPOINT','VITE_APP_NAME','COMPOSE_PROJECT_NAME',);
+'APP_NAME','APP_ENV','APP_KEY','APP_DEBUG','DEBUGBAR_ENABLED',
+'APP_URL','APP_LOCALE','APP_FALLBACK_LOCALE','APP_FAKER_LOCALE','APP_MAINTENANCE_DRIVER',
+'PHP_CLI_SERVER_WORKERS','BCRYPT_ROUNDS','LOG_CHANNEL','LOG_STACK','LOG_DEPRECATIONS_CHANNEL',
+'LOG_LEVEL','DB_CONNECTION','DB_HOST','DB_PORT','DB_DATABASE',
+'DB_USERNAME','DB_PASSWORD','SESSION_DRIVER','SESSION_LIFETIME','SESSION_ENCRYPT',
+'SESSION_PATH','SESSION_DOMAIN','BROADCAST_CONNECTION','FILESYSTEM_DISK','QUEUE_CONNECTION',
+'CACHE_STORE','MEMCACHED_HOST','REDIS_CLIENT','REDIS_HOST','REDIS_PASSWORD',
+'REDIS_PORT','MAIL_MAILER','MAIL_SCHEME','MAIL_HOST','MAIL_PORT',
+'MAIL_USERNAME','MAIL_PASSWORD','MAIL_ENCRYPTION','MAIL_FROM_ADDRESS','MAIL_FROM_NAME',
+'AWS_ACCESS_KEY_ID','AWS_SECRET_ACCESS_KEY','AWS_DEFAULT_REGION','AWS_BUCKET','AWS_USE_PATH_STYLE_ENDPOINT',
+'VITE_APP_NAME','COMPOSE_PROJECT_NAME',);
         
                 expectedArguments(\Illuminate\Support\Facades\Gate::has(), 0, argumentsSet('auth'));
     expectedArguments(\Illuminate\Support\Facades\Gate::allows(), 0, argumentsSet('auth'));
