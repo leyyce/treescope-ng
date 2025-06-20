@@ -413,8 +413,8 @@ export default function MapPicker({ value, onChange, className = '' }: MapPicker
             </form>
 
             {/* Map container */}
-            <div className="flex-1 min-h-[300px] w-full rounded-md border" style={{ position: 'relative' }}>
-                <MapContainer center={[location.lat, location.lng]} zoom={13} style={{ height: '100%', width: '100%', position: 'absolute', top: 0, left: 0 }} ref={mapRef}>
+            <div className="flex-1 min-h-[300px] w-full rounded-md border">
+                <MapContainer center={[location.lat, location.lng]} zoom={13} style={{ height: '100%', width: '100%', zIndex: 10 }} ref={mapRef}>
                     {/* ESRI World Imagery Tile Layer */}
                     <TileLayer
                         url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
