@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             HealthStatusSeeder::class,
             TreeSeeder::class,
             MeasurementSeeder::class,
+            TreePhotoSeeder::class,
         ]);
     }
 }

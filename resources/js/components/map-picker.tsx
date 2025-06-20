@@ -7,6 +7,12 @@ import { MapContainer, Marker, TileLayer, useMap, useMapEvents, Popup } from 're
 import { useIsMobile } from '@/hooks/use-mobile';
 import type { Tree } from '@/types';
 
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+import treeMarker from '../../img/tree_marker.svg'
+
 // Make sure to add these to your CSS or import them in your main layout
 // import 'leaflet/dist/leaflet.css';
 
@@ -49,9 +55,9 @@ interface MapPickerProps {
 
 // Custom marker icon for location selection
 const locationIcon = new Icon({
-    iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-    iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+    iconUrl: markerIcon,
+    iconRetinaUrl: markerIcon2x,
+    shadowUrl: markerShadow,
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -60,12 +66,11 @@ const locationIcon = new Icon({
 
 // Custom marker icon for trees (green color)
 const treeIcon = new Icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
+    iconUrl: treeMarker,
+    iconRetinaUrl: treeMarker,
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40],
 });
 
 // Component to handle map events
@@ -476,6 +481,7 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
                                     <div className="p-2">
                                         <h3 className="font-bold mb-2">{tree.tree_type?.name || 'Unknown Tree Type'}</h3>
                                         <p><strong>Scientific Name:</strong> {tree.tree_type?.scientific_name || 'N/A'}</p>
+                                        <p><strong>Coordinates:</strong> {tree.location.coordinates[0]}, {tree.location.coordinates[1]} </p>
                                         <p><strong>Health Status:</strong> {tree.health_status?.name || 'N/A'}</p>
                                         <p><strong>Description:</strong> {tree.health_status?.description || 'No description available'}</p>
                                         <p><strong>Measurement count:</strong> {tree.measurements?.length || 0}</p>
