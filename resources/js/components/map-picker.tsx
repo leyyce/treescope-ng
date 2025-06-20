@@ -366,10 +366,10 @@ export default function MapPicker({ value, onChange, className = '' }: MapPicker
     };
 
     return (
-        <div className={`space-y-4 ${className}`}>
+        <div className={`flex flex-col h-full ${className}`}>
             {/* Search bar */}
-            <form onSubmit={handleSubmit} className="flex gap-2">
-                <div className="relative flex-grow">
+            <form onSubmit={handleSubmit} className="flex flex-wrap gap-2 mb-4">
+                <div className="relative flex-grow min-w-[200px]">
                     <Input
                         ref={searchInputRef}
                         type="text"
@@ -403,18 +403,18 @@ export default function MapPicker({ value, onChange, className = '' }: MapPicker
                         </div>
                     )}
                 </div>
-                <Button type="submit" disabled={isSearching}>
+                <Button type="submit" disabled={isSearching} className="whitespace-nowrap">
                     {isSearching ? 'Searching...' : 'Search'}
                 </Button>
-                <Button type="button" variant="outline" onClick={getCurrentLocation} disabled={isLocating}>
+                <Button type="button" variant="outline" onClick={getCurrentLocation} disabled={isLocating} className="whitespace-nowrap">
                     <Locate className="mr-2 h-4 w-4" />
                     {isLocating ? 'Locating...' : 'My Location'}
                 </Button>
             </form>
 
             {/* Map container */}
-            <div className="h-[800px] w-full rounded-md border">
-                <MapContainer center={[location.lat, location.lng]} zoom={13} style={{ height: '100%', width: '100%' }} ref={mapRef}>
+            <div className="flex-1 min-h-[300px] w-full rounded-md border" style={{ position: 'relative' }}>
+                <MapContainer center={[location.lat, location.lng]} zoom={13} style={{ height: '100%', width: '100%', position: 'absolute', top: 0, left: 0 }} ref={mapRef}>
                     {/* ESRI World Imagery Tile Layer */}
                     <TileLayer
                         url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
@@ -439,11 +439,11 @@ export default function MapPicker({ value, onChange, className = '' }: MapPicker
             </div>
 
             {/* Display the current coordinates and accuracy if available */}
-            <div className="text-sm text-muted-foreground">
-                <div>
+            <div className="text-sm text-muted-foreground mt-2 flex-shrink-0">
+                <div className="truncate">
                     Selected coordinates: {location.lat.toFixed(6)}, {location.lng.toFixed(6)}
                 </div>
-                {accuracy !== null && <div>Accuracy: {accuracy.toFixed(2)} meters</div>}
+                {accuracy !== null && <div className="truncate">Accuracy: {accuracy.toFixed(2)} meters</div>}
             </div>
         </div>
     );
