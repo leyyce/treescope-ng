@@ -157,3 +157,9 @@
         @apply bg-background text-foreground;
     }
 }
+
+@layer utilities {
+    .leaflet-container-fix {
+        aspect-ratio: 1;
+    }
+}
