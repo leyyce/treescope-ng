@@ -4,6 +4,7 @@ import { Icon, LatLng, Map as LeafletMap } from 'leaflet';
 import { Locate, MapPin, Search } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from 'react-leaflet';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Make sure to add these to your CSS or import them in your main layout
 // import 'leaflet/dist/leaflet.css';
@@ -66,6 +67,9 @@ function MapEvents({ onLocationSelect }: { onLocationSelect: (latlng: LatLng) =>
 }
 
 export default function MapPicker({ value, onChange, className = '' }: MapPickerProps) {
+    // Check if we're on a mobile device
+    const isMobile = useIsMobile();
+
     // Default location (can be customized)
     const defaultLocation = { lat: 50.554233, lng: 9.677045 };
 
@@ -77,6 +81,7 @@ export default function MapPicker({ value, onChange, className = '' }: MapPicker
     const [address, setAddress] = useState<string>('');
     const [suggestions, setSuggestions] = useState<Array<{ display_name: string; lat: string; lon: string }>>([]);
     const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
+    const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
 
     // State for loading indicators
     const [isSearching, setIsSearching] = useState<boolean>(false);
@@ -365,6 +370,21 @@ export default function MapPicker({ value, onChange, className = '' }: MapPicker
         setSelectedSuggestionIndex(-1);
     };
 
+    // Handle input blur
+    const handleInputBlur = () => {
+        setIsInputFocused(false);
+    };
+
+    // Handle input click to move cursor to the end of text
+    // Only do this on mobile and when the input wasn't previously focused
+    const handleInputClick = () => {
+        if (isMobile && !isInputFocused && searchInputRef.current) {
+            const length = searchInputRef.current.value.length;
+            searchInputRef.current.setSelectionRange(length, length);
+        }
+        setIsInputFocused(true);
+    };
+
     return (
         <div className={`flex flex-col h-full ${className}`}>
             {/* Search bar */}
@@ -377,6 +397,8 @@ export default function MapPicker({ value, onChange, className = '' }: MapPicker
                         value={address}
                         onChange={handleAddressChange}
                         onKeyDown={handleKeyDown}
+                        onClick={handleInputClick}
+                        onBlur={handleInputBlur}
                         className="pr-10"
                     />
                     <div className="absolute inset-y-0 right-0 flex items-center pr-3">
