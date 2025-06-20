@@ -54,7 +54,7 @@ export default function Register() {
                             value={data.username}
                             onChange={(e) => setData('username', e.target.value)}
                             disabled={processing}
-                            placeholder="JaneDoe123"
+                            placeholder="JaneDoe"
                         />
                         <InputError message={errors.username} className="mt-2" />
                     </div>
