@@ -3,8 +3,9 @@ import { Input } from '@/components/ui/input';
 import { Icon, LatLng, Map as LeafletMap } from 'leaflet';
 import { Locate, MapPin, Search } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from 'react-leaflet';
+import { MapContainer, Marker, TileLayer, useMap, useMapEvents, Popup } from 'react-leaflet';
 import { useIsMobile } from '@/hooks/use-mobile';
+import type { Tree } from '@/types';
 
 // Make sure to add these to your CSS or import them in your main layout
 // import 'leaflet/dist/leaflet.css';
@@ -43,12 +44,23 @@ interface MapPickerProps {
     value?: { lat: number; lng: number };
     onChange?: (location: { lat: number; lng: number; accuracy: number | null }) => void;
     className?: string;
+    trees?: Tree[];
 }
 
-// Custom marker icon to replace the default one
-const customIcon = new Icon({
+// Custom marker icon for location selection
+const locationIcon = new Icon({
     iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
     iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
+});
+
+// Custom marker icon for trees (green color)
+const treeIcon = new Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
     shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -66,7 +78,7 @@ function MapEvents({ onLocationSelect }: { onLocationSelect: (latlng: LatLng) =>
     return null;
 }
 
-export default function MapPicker({ value, onChange, className = '' }: MapPickerProps) {
+export default function MapPicker({ value, onChange, className = '', trees = [] }: MapPickerProps) {
     // Check if we're on a mobile device
     const isMobile = useIsMobile();
 
@@ -452,7 +464,27 @@ export default function MapPicker({ value, onChange, className = '' }: MapPicker
                     />
 
                     {/* Marker for the selected location */}
-                    <Marker position={[location.lat, location.lng]} icon={customIcon} />
+                    <Marker position={[location.lat, location.lng]} icon={locationIcon} />
+
+                    {/* Markers for all trees */}
+                    {trees.map((tree) => {
+                        const lat = tree.location.coordinates[0];
+                        const lng = tree.location.coordinates[1];
+                        return (
+                            <Marker key={tree.id} position={[lat, lng]} icon={treeIcon}>
+                                <Popup>
+                                    <div className="p-2">
+                                        <h3 className="font-bold mb-2">{tree.tree_type?.name || 'Unknown Tree Type'}</h3>
+                                        <p><strong>Scientific Name:</strong> {tree.tree_type?.scientific_name || 'N/A'}</p>
+                                        <p><strong>Health Status:</strong> {tree.health_status?.name || 'N/A'}</p>
+                                        <p><strong>Description:</strong> {tree.health_status?.description || 'No description available'}</p>
+                                        <p><strong>Measurement count:</strong> {tree.measurements?.length || 0}</p>
+                                        <p><strong>Added:</strong> {new Date(tree.created_at).toLocaleDateString()}</p>
+                                    </div>
+                                </Popup>
+                            </Marker>
+                        );
+                    })}
 
                     {/* Component to handle map events */}
                     <MapEvents onLocationSelect={handleLocationSelect} />

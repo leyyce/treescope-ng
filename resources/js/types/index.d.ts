@@ -44,3 +44,47 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface Tree {
+    id: string;
+    user_id: string;
+    tree_type_id: string;
+    health_status_id: string;
+    location: {
+        type: string;
+        coordinates: [number, number]; // [longitude, latitude]
+    };
+    created_at: string;
+    updated_at: string;
+    tree_type?: TreeType;
+    health_status?: HealthStatus;
+    measurements?: Measurement[];
+    tree_photos?: TreePhoto[];
+}
+
+export interface TreeType {
+    id: string;
+    name: string;
+    scientific_name: string;
+    description: string;
+    [key: string]: unknown;
+}
+
+export interface HealthStatus {
+    id: string;
+    name: string;
+    description: string;
+    [key: string]: unknown;
+}
+
+export interface Measurement {
+    id: string;
+    tree_id: string;
+    [key: string]: unknown;
+}
+
+export interface TreePhoto {
+    id: string;
+    measurement_id: string;
+    [key: string]: unknown;
+}

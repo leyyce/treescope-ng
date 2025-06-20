@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Tree;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -13,7 +14,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::get('/tree-map', function () {
-        return Inertia::render('treemap');
+        return Inertia::render('treemap', [
+            'trees' => Tree::with(['treeType', 'healthStatus', 'measurements'])->get()
+        ]);
     })->name('tree-map');
 });
 
