@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tree;
 use App\Http\Requests\StoreTreeRequest;
 use App\Http\Requests\UpdateTreeRequest;
+use Inertia\Inertia;
 
 class TreeController extends Controller
 {
@@ -21,7 +22,7 @@ class TreeController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('trees/add');
     }
 
     /**
@@ -29,7 +30,8 @@ class TreeController extends Controller
      */
     public function store(StoreTreeRequest $request)
     {
-        //
+        $tree = Tree::create($request->validated());
+        return to_route('trees.show', $tree->id);
     }
 
     /**
@@ -37,7 +39,9 @@ class TreeController extends Controller
      */
     public function show(Tree $tree)
     {
-        //
+        return Inertia::render('trees/show', [
+            'tree' => $tree,
+        ]);
     }
 
     /**
