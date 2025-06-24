@@ -12,7 +12,7 @@ interface TreemapProps {
     trees: Tree[];
 }
 
-export default function Treemap({ trees }: TreemapProps) {
+export default function TreeMap({ trees }: TreemapProps) {
     const [location, setLocation] = useState<{ lat: number; lng: number; accuracy: number | null } | undefined>(undefined);
 
     const handleLocationChange = (newLocation: { lat: number; lng: number; accuracy: number | null }) => {

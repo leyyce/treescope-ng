@@ -14,7 +14,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::get('/tree-map', function () {
-        return Inertia::render('treemap', [
+        return Inertia::render('tree-map', [
             'trees' => Tree::with(['treeSpecies', 'treeCondition', 'measurements', 'user:id,username'])->get()
         ]);
     })->name('tree-map');
