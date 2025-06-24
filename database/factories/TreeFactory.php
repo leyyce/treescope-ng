@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\TreeCondition;
+use App\Models\TreeLocationConfidence;
 use App\Models\TreeSpecies;
 use App\Models\User;
 use Clickbar\Magellan\Data\Geometries\Point;
@@ -24,6 +25,7 @@ class TreeFactory extends Factory
             'user_id' => User::inRandomOrder()->first() ?? User::factory()->create(),
             'tree_species_id' => TreeSpecies::inRandomOrder()->first() ?? TreeSpecies::factory()->create(),
             'tree_condition_id' => TreeCondition::inRandomOrder()->first() ?? TreeCondition::factory()->create(),
+            'tree_location_confidence_id' => TreeLocationConfidence::inRandomOrder()->first() ?? TreeLocationConfidence::factory()->create(),
             'location' => Point::makeGeodetic(fake()->longitude(), fake()->latitude()),
         ];
     }

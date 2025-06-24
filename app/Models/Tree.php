@@ -50,6 +50,12 @@ class Tree extends Model
             'location' => Point::class,
         ];
     }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function treeSpecies(): BelongsTo
     {
         return $this->belongsTo(TreeSpecies::class);
@@ -58,6 +64,11 @@ class Tree extends Model
     public function treeCondition(): BelongsTo
     {
         return $this->belongsTo(TreeCondition::class);
+    }
+
+    public function treeLocationConfidence(): BelongsTo
+    {
+        return $this->belongsTo(TreeLocationConfidence::class);
     }
 
     public function measurements(): HasMany

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('tree_species_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('tree_condition_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('tree_location_confidence_id')->constrained()->onDelete('cascade');
             $table->magellanPoint('location');
             $table->timestamps();
         });
