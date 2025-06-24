@@ -482,8 +482,8 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
                                         <h3 className="font-bold mb-2">{tree.tree_species?.name || 'Unknown Tree Type'}</h3>
                                         <p><strong>Scientific Name:</strong> {tree.tree_species?.scientific_name || 'N/A'}</p>
                                         <p><strong>Coordinates:</strong> {tree.location.coordinates[0]}, {tree.location.coordinates[1]} </p>
-                                        <p><strong>Health Status:</strong> {tree.health_status?.name || 'N/A'}</p>
-                                        <p><strong>Description:</strong> {tree.health_status?.description || 'No description available'}</p>
+                                        <p><strong>Tree Condition:</strong> {tree.tree_condition?.name || 'N/A'}</p>
+                                        <p><strong>Description:</strong> {tree.tree_condition?.description || 'No description available'}</p>
                                         <p><strong>Measurement count:</strong> {tree.measurements?.length || 0}</p>
                                         <p><strong>Added:</strong> {new Date(tree.created_at).toLocaleDateString()}</p>
                                     </div>

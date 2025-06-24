@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\HealthStatus>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TreeCondition>
  */
-class HealthStatusFactory extends Factory
+class TreeConditionFactory extends Factory
 {
     /**
      * Define the model's default state.

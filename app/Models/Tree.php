@@ -16,11 +16,11 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property string $id
  * @property string $user_id
  * @property string $tree_species_id
- * @property string $health_status_id
+ * @property string $tree_condition_id
  * @property Point $location
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\HealthStatus $healthStatus
+ * @property-read \App\Models\TreeCondition $treeCondition
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Measurement> $measurements
  * @property-read int|null $measurements_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TreePhoto> $treePhotos
@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereHealthStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereTreeConditionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereLocation($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereTreeSpeciesId($value)
@@ -55,9 +55,9 @@ class Tree extends Model
         return $this->belongsTo(TreeSpecies::class);
     }
 
-    public function healthStatus(): BelongsTo
+    public function treeCondition(): BelongsTo
     {
-        return $this->belongsTo(HealthStatus::class);
+        return $this->belongsTo(TreeCondition::class);
     }
 
     public function measurements(): HasMany

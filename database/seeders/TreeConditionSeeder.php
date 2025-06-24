@@ -2,18 +2,18 @@
 
 namespace Database\Seeders;
 
-use App\Models\HealthStatus;
+use App\Models\TreeCondition;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class HealthStatusSeeder extends Seeder
+class TreeConditionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $defaultHealthStatuses = [
+        $defaultTreeConditions = [
             ['name' => 'Exzellent', 'description' => 'Der Baum ist sehr Gesund'],
             ['name' => 'Gut', 'description' => 'Der Baum ist gesund'],
             ['name' => 'In Ordnung', 'description' => 'Die Gesundheit des Baums ist nicht stark beinträchtigt'],
@@ -23,8 +23,8 @@ class HealthStatusSeeder extends Seeder
             ['name' => 'Tot', 'description' => 'Der Baum ist tot'],
         ];
 
-        foreach ($defaultHealthStatuses as $healthStatusData) {
-            HealthStatus::firstOrCreate($healthStatusData);
+        foreach ($defaultTreeConditions as $treeConditionData) {
+            TreeCondition::firstOrCreate($treeConditionData);
         }
     }
 }

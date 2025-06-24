@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HealthStatus;
-use App\Http\Requests\StoreHealthStatusRequest;
-use App\Http\Requests\UpdateHealthStatusRequest;
+use App\Models\TreeCondition;
+use App\Http\Requests\StoreTreeConditionRequest;
+use App\Http\Requests\UpdateTreeConditionRequest;
 
-class HealthStatusController extends Controller
+class TreeConditionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class HealthStatusController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreHealthStatusRequest $request)
+    public function store(StoreTreeConditionRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class HealthStatusController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(HealthStatus $healthStatus)
+    public function show(TreeCondition $treeCondition)
     {
         //
     }
@@ -43,7 +43,7 @@ class HealthStatusController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(HealthStatus $healthStatus)
+    public function edit(TreeCondition $treeCondition)
     {
         //
     }
@@ -51,7 +51,7 @@ class HealthStatusController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateHealthStatusRequest $request, HealthStatus $healthStatus)
+    public function update(UpdateTreeConditionRequest $request, TreeCondition $treeCondition)
     {
         //
     }
@@ -59,7 +59,7 @@ class HealthStatusController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HealthStatus $healthStatus)
+    public function destroy(TreeCondition $treeCondition)
     {
         //
     }

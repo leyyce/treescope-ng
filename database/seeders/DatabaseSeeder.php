@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
             TrustLevelSeeder::class,
             UserSeeder::class,
             TreeSpeciesSeeder::class,
-            HealthStatusSeeder::class,
+            TreeConditionSeeder::class,
             TreeSeeder::class,
             MeasurementSeeder::class,
             TreePhotoSeeder::class,

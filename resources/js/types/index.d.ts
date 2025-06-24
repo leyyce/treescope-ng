@@ -49,7 +49,7 @@ export interface Tree {
     id: string;
     user_id: string;
     tree_species_id: string;
-    health_status_id: string;
+    tree_condition_id: string;
     location: {
         type: string;
         coordinates: [number, number]; // [longitude, latitude]
@@ -57,7 +57,7 @@ export interface Tree {
     created_at: string;
     updated_at: string;
     tree_species?: TreeSpecies;
-    health_status?: HealthStatus;
+    tree_condition?: TreeCondition;
     measurements?: Measurement[];
     tree_photos?: TreePhoto[];
 }
@@ -70,7 +70,7 @@ export interface TreeSpecies {
     [key: string]: unknown;
 }
 
-export interface HealthStatus {
+export interface TreeCondition {
     id: string;
     name: string;
     description: string;

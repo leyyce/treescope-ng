@@ -20,7 +20,7 @@ class StoreTreeSpeciesRequest extends FormRequest
     {
         return [
             'tree_species_id' => ['required', 'uuid', 'exists:tree_species,id'],
-            'health_status_id' => ['required', 'uuid', 'exists:health_statuses,id'],
+            'tree_condition_id' => ['required', 'uuid', 'exists:tree_conditions,id'],
             'location' => ['required', new GeometryGeojsonRule([Point::class]), 'unique:trees,location'],
         ];
     }
