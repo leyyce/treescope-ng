@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\SpatialUniqueRule;
 use Clickbar\Magellan\Data\Geometries\Point;
 use Clickbar\Magellan\Http\Requests\TransformsGeojsonGeometry;
 use Clickbar\Magellan\Rules\GeometryGeojsonRule;
@@ -16,7 +17,7 @@ class StoreTreeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,7 +30,12 @@ class StoreTreeRequest extends FormRequest
         return [
             'tree_species_id' => ['required', 'uuid', 'exists:tree_species,id'],
             'tree_condition_id' => ['required', 'uuid', 'exists:tree_conditions,id'],
-            'location' => ['required', new GeometryGeojsonRule([Point::class]), 'unique:trees,location'],
+            'tree_location_confidence_id' => ['required', 'uuid', 'exists:tree_location_confidences,id'],
+            'location' => [
+                'required',
+                new GeometryGeojsonRule([Point::class]),
+                new SpatialUniqueRule('trees', 'location')
+            ],
         ];
     }
 

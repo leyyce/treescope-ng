@@ -12,6 +12,7 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
 import treeMarker from '../../img/tree_marker.svg'
+import { Link } from '@inertiajs/react';
 
 // Make sure to add these to your CSS or import them in your main layout
 // import 'leaflet/dist/leaflet.css';
@@ -129,7 +130,7 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
         void reverseGeocode(initialLocation.lat, initialLocation.lng);
 
         // Update the parent component with the initial location
-        onChange?.({ ...initialLocation, accuracy: null });
+        // onChange?.({ ...initialLocation, accuracy: null });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -486,6 +487,8 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
                                         <p><strong>Description:</strong> {tree.tree_condition?.description || 'No description available'}</p>
                                         <p><strong>Measurement count:</strong> {tree.measurements?.length || 0}</p>
                                         <p><strong>Added:</strong> {new Date(tree.created_at).toLocaleDateString()}</p>
+                                        <p><strong>Created by:</strong> {tree.user?.username || 'Unknown'}</p>
+                                        <Link href={route('trees.show', { tree: tree.id })}>Details</Link>
                                     </div>
                                 </Popup>
                             </Marker>
@@ -503,7 +506,7 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
                 <div className="truncate">
                     Selected coordinates: {location.lat.toFixed(6)}, {location.lng.toFixed(6)}
                 </div>
-                {accuracy !== null && <div className="truncate">Accuracy: {accuracy.toFixed(2)} meters</div>}
+                <div className="truncate">Accuracy: {accuracy !== null ? accuracy.toFixed(2) + 'meters' : 'Manual selection'}</div>
             </div>
         </div>
     );

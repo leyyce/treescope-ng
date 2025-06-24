@@ -44,6 +44,14 @@ class Tree extends Model
     /** @use HasFactory<\Database\Factories\TreeFactory> */
     use HasFactory, HasUuids;
 
+    protected $fillable = [
+        'user_id',
+        'location',
+        'tree_species_id',
+        'tree_condition_id',
+        'tree_location_confidence_id',
+    ];
+
     protected function casts(): array
     {
         return [
