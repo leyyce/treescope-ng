@@ -20,7 +20,7 @@ class HealthStatusSeeder extends Seeder
             ['name' => 'Beeinträchtigt', 'description' => 'Die Gesundheit des Baums beeinträchtigt'],
             ['name' => 'Kritisch', 'description' => 'Die Gesundheit des Baums ist stark beeinträchtigt'],
             ['name' => 'Sterbend', 'description' => 'Der Baum befindet sich im sterben'],
-            ['name' => 'Tot', 'description' => 'Baum ist tot'],
+            ['name' => 'Tot', 'description' => 'Der Baum ist tot'],
         ];
 
         foreach ($defaultHealthStatuses as $healthStatusData) {
