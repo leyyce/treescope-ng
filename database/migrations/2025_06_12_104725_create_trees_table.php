@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('trees', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
-            $table->foreignUuid('tree_type_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('tree_species_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('health_status_id')->constrained()->onDelete('cascade');
             $table->magellanPoint('location');
             $table->timestamps();

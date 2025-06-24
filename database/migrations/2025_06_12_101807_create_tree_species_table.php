@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tree_types', function (Blueprint $table) {
+        Schema::create('tree_species', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('scientific_name')->nullable();
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tree_types');
+        Schema::dropIfExists('tree_species');
     }
 };

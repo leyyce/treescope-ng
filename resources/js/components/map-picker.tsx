@@ -479,8 +479,8 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
                             <Marker key={tree.id} position={[lat, lng]} icon={treeIcon}>
                                 <Popup>
                                     <div className="p-2">
-                                        <h3 className="font-bold mb-2">{tree.tree_type?.name || 'Unknown Tree Type'}</h3>
-                                        <p><strong>Scientific Name:</strong> {tree.tree_type?.scientific_name || 'N/A'}</p>
+                                        <h3 className="font-bold mb-2">{tree.tree_species?.name || 'Unknown Tree Type'}</h3>
+                                        <p><strong>Scientific Name:</strong> {tree.tree_species?.scientific_name || 'N/A'}</p>
                                         <p><strong>Coordinates:</strong> {tree.location.coordinates[0]}, {tree.location.coordinates[1]} </p>
                                         <p><strong>Health Status:</strong> {tree.health_status?.name || 'N/A'}</p>
                                         <p><strong>Description:</strong> {tree.health_status?.description || 'No description available'}</p>

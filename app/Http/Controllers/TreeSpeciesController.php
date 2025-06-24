@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TreeType;
-use App\Http\Requests\StoreTreeTypeRequest;
-use App\Http\Requests\UpdateTreeTypeRequest;
+use App\Models\TreeSpecies;
+use App\Http\Requests\StoreTreeSpeciesRequest;
+use App\Http\Requests\UpdateTreeSpeciesRequest;
 
-class TreeTypeController extends Controller
+class TreeSpeciesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class TreeTypeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTreeTypeRequest $request)
+    public function store(StoreTreeSpeciesRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class TreeTypeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TreeType $treeType)
+    public function show(TreeSpecies $treeSpecies)
     {
         //
     }
@@ -43,7 +43,7 @@ class TreeTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(TreeType $treeType)
+    public function edit(TreeSpecies $treeSpecies)
     {
         //
     }
@@ -51,7 +51,7 @@ class TreeTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTreeTypeRequest $request, TreeType $treeType)
+    public function update(UpdateTreeSpeciesRequest $request, TreeSpecies $treeSpecies)
     {
         //
     }
@@ -59,7 +59,7 @@ class TreeTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TreeType $treeType)
+    public function destroy(TreeSpecies $treeSpecies)
     {
         //
     }

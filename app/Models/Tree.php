@@ -11,11 +11,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 /**
- * 
+ *
  *
  * @property string $id
  * @property string $user_id
- * @property string $tree_type_id
+ * @property string $tree_species_id
  * @property string $health_status_id
  * @property Point $location
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property-read int|null $measurements_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TreePhoto> $treePhotos
  * @property-read int|null $tree_photos_count
- * @property-read \App\Models\TreeType $treeType
+ * @property-read \App\Models\TreeSpecies $treeSpecies
  * @method static \Database\Factories\TreeFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree newQuery()
@@ -34,7 +34,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereHealthStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereLocation($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereTreeTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereTreeSpeciesId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereUserId($value)
  * @mixin \Eloquent
@@ -50,9 +50,9 @@ class Tree extends Model
             'location' => Point::class,
         ];
     }
-    public function treeType(): BelongsTo
+    public function treeSpecies(): BelongsTo
     {
-        return $this->belongsTo(TreeType::class);
+        return $this->belongsTo(TreeSpecies::class);
     }
 
     public function healthStatus(): BelongsTo

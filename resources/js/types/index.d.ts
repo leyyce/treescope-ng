@@ -48,7 +48,7 @@ export interface User {
 export interface Tree {
     id: string;
     user_id: string;
-    tree_type_id: string;
+    tree_species_id: string;
     health_status_id: string;
     location: {
         type: string;
@@ -56,13 +56,13 @@ export interface Tree {
     };
     created_at: string;
     updated_at: string;
-    tree_type?: TreeType;
+    tree_species?: TreeSpecies;
     health_status?: HealthStatus;
     measurements?: Measurement[];
     tree_photos?: TreePhoto[];
 }
 
-export interface TreeType {
+export interface TreeSpecies {
     id: string;
     name: string;
     scientific_name: string;

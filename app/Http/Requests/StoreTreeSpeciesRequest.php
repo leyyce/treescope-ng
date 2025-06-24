@@ -7,7 +7,7 @@ use Clickbar\Magellan\Http\Requests\TransformsGeojsonGeometry;
 use Clickbar\Magellan\Rules\GeometryGeojsonRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreTreeTypeRequest extends FormRequest
+class StoreTreeSpeciesRequest extends FormRequest
 {
     use TransformsGeojsonGeometry;
 
@@ -19,7 +19,7 @@ class StoreTreeTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tree_type_id' => ['required', 'uuid', 'exists:tree_types,id'],
+            'tree_species_id' => ['required', 'uuid', 'exists:tree_species,id'],
             'health_status_id' => ['required', 'uuid', 'exists:health_statuses,id'],
             'location' => ['required', new GeometryGeojsonRule([Point::class]), 'unique:trees,location'],
         ];

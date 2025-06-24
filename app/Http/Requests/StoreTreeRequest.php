@@ -2,10 +2,15 @@
 
 namespace App\Http\Requests;
 
+use Clickbar\Magellan\Data\Geometries\Point;
+use Clickbar\Magellan\Http\Requests\TransformsGeojsonGeometry;
+use Clickbar\Magellan\Rules\GeometryGeojsonRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreTreeRequest extends FormRequest
 {
+    use TransformsGeojsonGeometry;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -22,7 +27,12 @@ class StoreTreeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'location' => ['required', new GeometryGeojsonRule([Point::class]), 'unique:trees,location'],
         ];
+    }
+
+    public function geometries(): array
+    {
+        return ['location'];
     }
 }
