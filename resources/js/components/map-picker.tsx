@@ -1,18 +1,18 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useIsMobile } from '@/hooks/use-mobile';
+import type { Tree } from '@/types';
 import { Icon, LatLng, Map as LeafletMap } from 'leaflet';
 import { Locate, MapPin, Search } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { MapContainer, Marker, TileLayer, useMap, useMapEvents, Popup } from 'react-leaflet';
-import { useIsMobile } from '@/hooks/use-mobile';
-import type { Tree } from '@/types';
+import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet';
 
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-import treeMarker from '../../img/tree_marker.svg'
 import { Link } from '@inertiajs/react';
+import treeMarker from '../../img/tree_marker.svg';
 
 // Make sure to add these to your CSS or import them in your main layout
 // import 'leaflet/dist/leaflet.css';
@@ -183,7 +183,7 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
             e.preventDefault();
             const indexToSelect = selectedSuggestionIndex >= 0 ? selectedSuggestionIndex : -1;
             if (indexToSelect < 0) {
-                handleSubmit(e)
+                handleSubmit(e);
                 return;
             }
             handleSuggestionSelect(suggestions[indexToSelect]);
@@ -404,10 +404,10 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
     };
 
     return (
-        <div className={`flex flex-col h-full ${className}`}>
+        <div className={`flex h-full flex-col ${className}`}>
             {/* Search bar */}
-            <form onSubmit={handleSubmit} className="flex flex-wrap gap-2 mb-4">
-                <div className="relative flex-grow min-w-[200px]">
+            <form onSubmit={handleSubmit} className="mb-4 flex flex-wrap gap-2">
+                <div className="relative min-w-[200px] flex-grow">
                     <Input
                         ref={searchInputRef}
                         type="text"
@@ -453,7 +453,7 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
             </form>
 
             {/* Map container */}
-            <div className="flex-1 min-h-[300px] w-full rounded-md border">
+            <div className="min-h-[300px] w-full flex-1 rounded-md border">
                 <MapContainer center={[location.lat, location.lng]} zoom={13} style={{ height: '100%', width: '100%', zIndex: 10 }} ref={mapRef}>
                     {/* ESRI World Imagery Tile Layer */}
                     <TileLayer
@@ -480,14 +480,28 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
                             <Marker key={tree.id} position={[lat, lng]} icon={treeIcon}>
                                 <Popup>
                                     <div className="p-2">
-                                        <h3 className="font-bold mb-2">{tree.tree_species?.name || 'Unknown Tree Type'}</h3>
-                                        <p><strong>Scientific Name:</strong> {tree.tree_species?.scientific_name || 'N/A'}</p>
-                                        <p><strong>Coordinates:</strong> {tree.location.coordinates[0]}, {tree.location.coordinates[1]} </p>
-                                        <p><strong>Tree Condition:</strong> {tree.tree_condition?.name || 'N/A'}</p>
-                                        <p><strong>Description:</strong> {tree.tree_condition?.description || 'No description available'}</p>
-                                        <p><strong>Measurement count:</strong> {tree.tree_measurements?.length || 0}</p>
-                                        <p><strong>Added:</strong> {new Date(tree.created_at).toLocaleDateString()}</p>
-                                        <p><strong>Created by:</strong> {tree.user?.username || 'Unknown'}</p>
+                                        <h3 className="mb-2 font-bold">{tree.tree_species?.name || 'Unknown Tree Type'}</h3>
+                                        <p>
+                                            <strong>Scientific Name:</strong> {tree.tree_species?.scientific_name || 'N/A'}
+                                        </p>
+                                        <p>
+                                            <strong>Coordinates:</strong> {tree.location.coordinates[0]}, {tree.location.coordinates[1]}
+                                        </p>
+                                        <p>
+                                            <strong>Tree Condition:</strong> {tree.tree_condition?.name || 'N/A'}
+                                        </p>
+                                        <p>
+                                            <strong>Description:</strong> {tree.tree_condition?.description || 'No description available'}
+                                        </p>
+                                        <p>
+                                            <strong>Measurement count:</strong> {tree.tree_measurements?.length || 0}
+                                        </p>
+                                        <p>
+                                            <strong>Added:</strong> {new Date(tree.created_at).toLocaleDateString()}
+                                        </p>
+                                        <p>
+                                            <strong>Created by:</strong> {tree.user?.username || 'Unknown'}
+                                        </p>
                                         <Link href={route('trees.show', { tree: tree.id })}>Details</Link>
                                     </div>
                                 </Popup>
@@ -502,7 +516,7 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
             </div>
 
             {/* Display the current coordinates and accuracy if available */}
-            <div className="text-sm text-muted-foreground mt-2 flex-shrink-0">
+            <div className="mt-2 flex-shrink-0 text-sm text-muted-foreground">
                 <div className="truncate">
                     Selected coordinates: {location.lat.toFixed(6)}, {location.lng.toFixed(6)}
                 </div>
