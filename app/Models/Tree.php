@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 /**
- *
+ * 
  *
  * @property string $id
  * @property string $user_id
@@ -37,6 +37,10 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereTreeSpeciesId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereUserId($value)
+ * @property string $tree_location_confidence_id
+ * @property-read \App\Models\TreeLocationConfidence $treeLocationConfidence
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereTreeLocationConfidenceId($value)
  * @mixin \Eloquent
  */
 class Tree extends Model

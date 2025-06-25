@@ -458,7 +458,7 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
                     {/* ESRI World Imagery Tile Layer */}
                     <TileLayer
                         url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-                        attribution="Tiles &copy; <a href='http://www.esri.com/'>Esri</a> &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+                        attribution="Tiles &copy; <a href='https://www.esri.com/'>Esri</a> &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
                         maxZoom={20}
                     />
 
