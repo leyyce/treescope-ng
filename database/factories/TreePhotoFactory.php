@@ -22,6 +22,13 @@ class TreePhotoFactory extends Factory
             'tree-photos/examples/Tree1.jpg',
             'tree-photos/examples/Tree2.jpg',
             'tree-photos/examples/Tree3.jpg',
+            'tree-photos/examples/Tree4.jpg',
+            'tree-photos/examples/Tree5.jpg',
+            'tree-photos/examples/Tree6.jpg',
+            'tree-photos/examples/Tree7.jpg',
+            'tree-photos/examples/Tree8.jpg',
+            'tree-photos/examples/Tree9.jpg',
+            'tree-photos/examples/Tree10.jpg',
         ];
 
         return [

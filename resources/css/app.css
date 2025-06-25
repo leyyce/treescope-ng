@@ -159,7 +159,75 @@
 }
 
 @layer utilities {
-    .leaflet-container-fix {
-        aspect-ratio: 1;
+    /* Custom styles for tree popups */
+    .leaflet-popup {
+        margin-bottom: 20px;
+    }
+
+    .leaflet-popup-content-wrapper {
+        border-radius: var(--radius);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .leaflet-popup-content {
+        margin: 0;
+        padding: 12px;
+        min-width: 240px;
+        overflow-x: hidden;
+    }
+
+    .tree-popup .leaflet-popup-content-wrapper {
+        border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+
+    .tree-popup .leaflet-popup-tip {
+        background-color: #f0fdf4;
+        border: 1px solid rgba(34, 197, 94, 0.2);
+        border-top: none;
+        border-left: none;
+    }
+
+    /* Mobile-specific styles */
+    @media (max-width: 640px) {
+        .leaflet-popup {
+            max-width: 90vw;
+        }
+
+        .leaflet-popup-content {
+            margin: 0;
+            padding: 10px;
+            max-height: 20vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .tree-popup .leaflet-popup-content-wrapper {
+            max-width: 280px;
+        }
+    }
+
+    /* Ensure popup links maintain white text color in all states */
+    .tree-popup a.bg-green-600 {
+        color: white !important;
+    }
+
+    .tree-popup a.bg-green-600:visited {
+        color: white !important;
+    }
+
+    .tree-popup a.bg-green-600:hover {
+        color: white !important;
+    }
+
+    /* Animation for popup opening */
+    .leaflet-fade-anim .leaflet-popup {
+        opacity: 0;
+        transition: opacity 0.2s linear;
+    }
+
+    .leaflet-fade-anim .leaflet-map-pane .leaflet-popup {
+        opacity: 1;
     }
 }

@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import { useIsMobile } from '@/hooks/use-mobile';
 import type { Tree } from '@/types';
 import { Icon, LatLng, Map as LeafletMap } from 'leaflet';
-import { Locate, MapPin, Search } from 'lucide-react';
+import { Locate, MapPin, Search, User, Calendar, Ruler, Trees, Info, MapPin as PinIcon, FileText } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet';
 
@@ -478,31 +478,74 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
                         const lng = tree.location.coordinates[1];
                         return (
                             <Marker key={tree.id} position={[lat, lng]} icon={treeIcon}>
-                                <Popup>
-                                    <div className="p-2">
-                                        <h3 className="mb-2 font-bold">{tree.tree_species?.name || 'Unknown Tree Type'}</h3>
-                                        <p>
-                                            <strong>Scientific Name:</strong> {tree.tree_species?.scientific_name || 'N/A'}
-                                        </p>
-                                        <p>
-                                            <strong>Coordinates:</strong> {tree.location.coordinates[0]}, {tree.location.coordinates[1]}
-                                        </p>
-                                        <p>
-                                            <strong>Tree Condition:</strong> {tree.tree_condition?.name || 'N/A'}
-                                        </p>
-                                        <p>
-                                            <strong>Description:</strong> {tree.tree_condition?.description || 'No description available'}
-                                        </p>
-                                        <p>
-                                            <strong>Measurement count:</strong> {tree.tree_measurements?.length || 0}
-                                        </p>
-                                        <p>
-                                            <strong>Added:</strong> {new Date(tree.created_at).toLocaleDateString()}
-                                        </p>
-                                        <p>
-                                            <strong>Created by:</strong> {tree.user?.username || 'Unknown'}
-                                        </p>
-                                        <Link href={route('trees.show', { tree: tree.id })}>Details</Link>
+                                <Popup className="tree-popup">
+                                    <div className={`${isMobile ? 'max-w-[280px]' : 'max-w-[350px]'} overflow-y-auto overflow-x-hidden`}>
+                                        <div className="mb-3 rounded-t-md bg-green-50 p-2 -m-2 mb-2">
+                                            <div className="flex items-center">
+                                                <Trees className="mr-2 h-5 w-5 text-green-700" />
+                                                <h3 className="text-lg font-bold text-green-800">{tree.tree_species?.name || 'Unknown Tree Type'}</h3>
+                                            </div>
+                                            {tree.tree_species?.scientific_name && (
+                                                <p className="mt-1 text-sm italic text-green-700">{tree.tree_species.scientific_name}</p>
+                                            )}
+                                        </div>
+
+                                        <div className="mb-3 grid grid-cols-1 gap-2 text-sm">
+                                            <div className="flex items-start">
+                                                <PinIcon className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0 text-gray-500" />
+                                                <div className="flex flex-col">
+                                                    <span className="font-medium text-gray-700">Coordinates:</span>
+                                                    <span className="truncate text-gray-600">{tree.location.coordinates[0].toFixed(4)}, {tree.location.coordinates[1].toFixed(4)}</span>
+                                                </div>
+                                            </div>
+
+                                            {tree.tree_condition?.name && (
+                                                <div className="flex items-start">
+                                                    <Info className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0 text-gray-500" />
+                                                    <div className="flex flex-col">
+                                                        <span className="font-medium text-gray-700">Condition:</span>
+                                                        <span className="text-gray-600">{tree.tree_condition.name}</span>
+                                                        {tree.tree_condition?.description && (
+                                                            <span className={`text-gray-500 text-xs mt-0.5`}>
+                                                                {tree.tree_condition.description}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            <div className="flex items-start">
+                                                <Ruler className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0 text-gray-500" />
+                                                <div className="flex flex-col">
+                                                    <span className="font-medium text-gray-700">Measurements:</span>
+                                                    <span className="text-gray-600">{tree.tree_measurements?.length || 0}</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-start">
+                                                <Calendar className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0 text-gray-500" />
+                                                <div className="flex flex-col">
+                                                    <span className="font-medium text-gray-700">Added:</span>
+                                                    <span className="text-gray-600">{new Date(tree.created_at).toLocaleDateString()}</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-start">
+                                                <User className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0 text-gray-500" />
+                                                <div className="flex flex-col">
+                                                    <span className="font-medium text-gray-700">Created by:</span>
+                                                    <span className="text-gray-600">{tree.user?.username || 'Unknown'}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <Link
+                                            href={route('trees.show', { tree: tree.id })}
+                                            className="mt-2 inline-flex w-full items-center justify-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                                        >
+                                            <FileText className="mr-2 h-4 w-4" />
+                                            View Tree Details
+                                        </Link>
                                     </div>
                                 </Popup>
                             </Marker>
