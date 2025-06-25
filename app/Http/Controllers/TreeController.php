@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateTreeRequest;
 use App\Models\TreeCondition;
 use App\Models\TreeLocationConfidence;
 use App\Models\TreeSpecies;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class TreeController extends Controller
@@ -48,8 +49,24 @@ class TreeController extends Controller
      */
     public function show(Tree $tree)
     {
+        // Load tree with basic relationships (excluding measurements)
+        $tree->load([
+            'treeSpecies',
+            'treeCondition',
+            'treeLocationConfidence',
+            'user:id,username',
+        ]);
+
+        // Paginate tree measurements
+        $perPage = 3; // Same as the frontend's measurementsPerPage
+        $measurements = $tree->treeMeasurements()
+            ->with(['user:id,username', 'treePhotos'])
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+
         return Inertia::render('trees/show', [
-            'tree' => $tree->load('treeSpecies', 'treeCondition', 'treeLocationConfidence', 'user:id,username'),
+            'tree' => $tree,
+            'measurements' => $measurements,
         ]);
     }
 

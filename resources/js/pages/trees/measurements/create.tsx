@@ -19,10 +19,10 @@ export default function CreateTreeMeasurement({ tree }: CreateTreeMeasurementPro
     const [measurementType, setMeasurementType] = useState('diameter');
     const [trunkValue, setTrunkValue] = useState<string>('');
     const [photoFields, setPhotoFields] = useState([
+        { id: 0, file: null as File | null, note: '' },
         { id: 1, file: null as File | null, note: '' },
-        { id: 2, file: null as File | null, note: '' },
     ]);
-    const [nextPhotoId, setNextPhotoId] = useState(3);
+    const [nextPhotoId, setNextPhotoId] = useState(2);
 
     const { data, setData, post, processing, errors } = useForm({
         tree_id: tree.id,
@@ -300,6 +300,9 @@ export default function CreateTreeMeasurement({ tree }: CreateTreeMeasurementPro
                                             onChange={(e) => handleNoteChange(field.id, e.target.value)}
                                             className="h-20"
                                         />
+                                        {(errors as Record<string, string>)[`photos.${index}.note`] && (
+                                            <p className="mt-1 text-sm text-red-500">{(errors as Record<string, string>)[`photos.${index}.note`]}</p>
+                                        )}
                                     </div>
                                 ))}
 
@@ -332,6 +335,7 @@ export default function CreateTreeMeasurement({ tree }: CreateTreeMeasurementPro
                                     placeholder="Optional note about this measurement"
                                     className="h-32"
                                 />
+                                {errors.note && <p className="mt-1 text-sm text-red-500">{errors.note}</p>}
                             </div>
 
                             <div className="flex justify-end space-x-2 pt-4">

@@ -1,6 +1,21 @@
 import { LucideIcon } from 'lucide-react';
 import type { Config } from 'ziggy-js';
 
+export interface Paginator<T> {
+    data: T[];
+    current_page: number;
+    from: number;
+    last_page: number;
+    per_page: number;
+    to: number;
+    total: number;
+    links: {
+        url: string | undefined;
+        label: string;
+        active: boolean;
+    }[];
+}
+
 export interface Auth {
     user: User;
 }
@@ -85,13 +100,29 @@ export interface TreeCondition {
 export interface TreeMeasurement {
     id: string;
     tree_id: string;
+    user_id: string;
+    height: string;
+    inclination: number;
+    trunk_diameter: number;
+    note: string | null;
+    tree: Tree;
+    user: User;
+    created_at: string;
+    updated_at: string;
+    tree_photos: TreePhoto[];
 
     [key: string]: unknown;
 }
 
 export interface TreePhoto {
     id: string;
-    measurement_id: string;
+    tree_measurement_id: string;
+    user_id: string;
+    path: string;
+    url: string;
+    note: string | null;
+    created_at: string;
+    updated_at: string;
 
     [key: string]: unknown;
 }

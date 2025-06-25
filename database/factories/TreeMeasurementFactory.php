@@ -25,6 +25,8 @@ class TreeMeasurementFactory extends Factory
             'inclination' => fake()->numberBetween(0, 90),
             'trunk_diameter' => fake()->numberBetween(1, 100),
             'note' => fake()->text(),
+            'created_at' => fake()->dateTime(),
+            'updated_at' => fake()->dateTime(),
         ];
     }
 }
