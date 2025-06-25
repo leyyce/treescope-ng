@@ -1,7 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, Tree } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 
 interface ShowTreeProps {
     tree: Tree;
@@ -24,9 +25,14 @@ export default function ShowTree({ tree }: ShowTreeProps) {
             <Head title="Tree Details" />
             <div className="flex h-full w-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <Card className="w-full">
-                    <CardHeader>
-                        <CardTitle>Tree Details</CardTitle>
-                        <CardDescription>View details about this tree.</CardDescription>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                        <div>
+                            <CardTitle>Tree Details</CardTitle>
+                            <CardDescription>View details about this tree.</CardDescription>
+                        </div>
+                        <Button asChild className="ml-auto">
+                            <Link href={`/trees/${tree.id}/measurements/create`}>Add a measurement</Link>
+                        </Button>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-6">

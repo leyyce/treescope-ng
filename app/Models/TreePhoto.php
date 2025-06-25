@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 /**
- * 
+ *
  *
  * @property string $id
  * @property string $measurement_id
@@ -43,6 +43,8 @@ class TreePhoto extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = [
+        'tree_measurement_id',
+        'user_id',
         'path',
         'note',
     ];

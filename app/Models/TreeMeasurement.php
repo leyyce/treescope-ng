@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property string $id
  * @property string $tree_id
@@ -44,10 +44,12 @@ class TreeMeasurement extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = [
+        'tree_id',
+        'user_id',
         'height',
         'inclination',
         'trunk_diameter',
-        'notes'
+        'note'
     ];
 
     public function tree(): BelongsTo {

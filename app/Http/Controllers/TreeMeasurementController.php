@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tree;
 use App\Models\TreeMeasurement;
+use App\Models\TreePhoto;
 use App\Http\Requests\StoreTreeMeasurementRequest;
 use App\Http\Requests\UpdateTreeMeasurementRequest;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class TreeMeasurementController extends Controller
 {
@@ -19,17 +24,67 @@ class TreeMeasurementController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Tree $tree)
     {
-        //
+        return Inertia::render('trees/measurements/create', [
+            'tree' => $tree->load('treeSpecies'),
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTreeMeasurementRequest $request)
+    public function store(StoreTreeMeasurementRequest $request, Tree $tree)
     {
-        //
+        $validatedData = $request->validated();
+
+        // Create the measurement
+        $measurement = TreeMeasurement::create([
+            'tree_id' => $validatedData['tree_id'],
+            'user_id' => $validatedData['user_id'],
+            'height' => $validatedData['height'],
+            'inclination' => $validatedData['inclination'],
+            'trunk_diameter' => $validatedData['trunk_diameter'],
+            'note' => $validatedData['note'] ?? null,
+        ]);
+
+        // Process and store photos
+        if (isset($validatedData['photos']) && is_array($validatedData['photos'])) {
+            $processedFiles = [];
+
+            foreach ($validatedData['photos'] as $photoData) {
+                if (!isset($photoData['file']) || !$photoData['file']->isValid()) {
+                    continue;
+                }
+
+                $file = $photoData['file'];
+                $fileHash = md5_file($file->getRealPath());
+
+                // Skip duplicate files
+                if (in_array($fileHash, $processedFiles)) {
+                    continue;
+                }
+
+                $processedFiles[] = $fileHash;
+
+                // Generate a unique filename
+                $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+
+                // Store the file
+                $path = $file->storeAs('tree-photos', $filename, 'public');
+
+                // Create photo record
+                TreePhoto::create([
+                    'tree_measurement_id' => $measurement->id,
+                    'user_id' => $validatedData['user_id'],
+                    'path' => $path,
+                    'note' => $photoData['note'] ?? null,
+                ]);
+            }
+        }
+
+        return redirect()->route('trees.show', $tree->id)
+            ->with('success', 'Tree measurement added successfully.');
     }
 
     /**
