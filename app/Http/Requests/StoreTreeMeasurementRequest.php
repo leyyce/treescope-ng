@@ -43,21 +43,51 @@ class StoreTreeMeasurementRequest extends FormRequest
     }
 
     /**
-     * Get custom messages for validator errors.
+     * Configure the validator instance.
      *
-     * @return array<string, string>
+     * @param \Illuminate\Validation\Validator $validator
+     * @return void
      */
-    public function messages(): array
+    public function withValidator(\Illuminate\Validation\Validator $validator): void
     {
-        return [
-            'photos.min' => 'At least 2 photos are required.',
-            'photos.*.file.required' => 'Each photo upload field must contain a file.',
-            'photos.*.file.image' => 'Uploaded files must be images.',
-            'trunk_diameter.min' => 'Trunk diameter must be a positive value.',
-            'height.min' => 'Tree height must be a positive value.',
-            'height.max' => 'Tree height cannot exceed 999.99 meters.',
-            'inclination.min' => 'Inclination must be between 0 and 90 degrees.',
-            'inclination.max' => 'Inclination must be between 0 and 90 degrees.',
-        ];
+        $validator->after(function ($validator) {
+            $this->validateNoDuplicatePhotos($validator);
+        });
+    }
+
+    /**
+     * Validate that there are no duplicate photos.
+     *
+     * @param \Illuminate\Validation\Validator $validator
+     * @return void
+     */
+    protected function validateNoDuplicatePhotos($validator): void
+    {
+        if (!$this->has('photos') || !is_array($this->photos)) {
+            return;
+        }
+
+        $fileHashes = [];
+        $hasDuplicates = false;
+
+        foreach ($this->photos as $photoData) {
+            if (!isset($photoData['file']) || !$photoData['file']->isValid()) {
+                continue;
+            }
+
+            $file = $photoData['file'];
+            $fileHash = md5_file($file->getRealPath());
+
+            if (in_array($fileHash, $fileHashes)) {
+                $hasDuplicates = true;
+                break;
+            }
+
+            $fileHashes[] = $fileHash;
+        }
+
+        if ($hasDuplicates) {
+            $validator->errors()->add('photos', 'Duplicate photos are not allowed. Please ensure all uploaded photos are unique.');
+        }
     }
 }

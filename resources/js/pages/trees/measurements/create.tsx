@@ -24,7 +24,7 @@ export default function CreateTreeMeasurement({ tree }: CreateTreeMeasurementPro
   ]);
   const [nextPhotoId, setNextPhotoId] = useState(3);
 
-  const { data, setData, post, processing, errors, reset } = useForm({
+  const { data, setData, post, processing, errors } = useForm({
     tree_id: tree.id,
     trunk_diameter: '',
     height: '',

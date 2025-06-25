@@ -50,22 +50,12 @@ class TreeMeasurementController extends Controller
 
         // Process and store photos
         if (isset($validatedData['photos']) && is_array($validatedData['photos'])) {
-            $processedFiles = [];
-
             foreach ($validatedData['photos'] as $photoData) {
                 if (!isset($photoData['file']) || !$photoData['file']->isValid()) {
                     continue;
                 }
 
                 $file = $photoData['file'];
-                $fileHash = md5_file($file->getRealPath());
-
-                // Skip duplicate files
-                if (in_array($fileHash, $processedFiles)) {
-                    continue;
-                }
-
-                $processedFiles[] = $fileHash;
 
                 // Generate a unique filename
                 $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
