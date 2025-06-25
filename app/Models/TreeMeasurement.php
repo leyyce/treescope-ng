@@ -52,11 +52,13 @@ class TreeMeasurement extends Model
         'note'
     ];
 
-    public function tree(): BelongsTo {
+    public function tree(): BelongsTo
+    {
         return $this->belongsTo(Tree::class);
     }
 
-    public function treePhotos(): HasMany {
+    public function treePhotos(): HasMany
+    {
         return $this->hasMany(TreePhoto::class);
     }
 }

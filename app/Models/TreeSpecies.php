@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property string $id
  * @property string $name
@@ -62,7 +62,8 @@ class TreeSpecies extends Model
         'g',
     ];
 
-    public function trees(): HasMany {
+    public function trees(): HasMany
+    {
         return $this->hasMany(Tree::class);
     }
 }
