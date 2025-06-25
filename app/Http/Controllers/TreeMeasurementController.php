@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Measurement;
-use App\Http\Requests\StoreMeasurementRequest;
-use App\Http\Requests\UpdateMeasurementRequest;
+use App\Models\TreeMeasurement;
+use App\Http\Requests\StoreTreeMeasurementRequest;
+use App\Http\Requests\UpdateTreeMeasurementRequest;
 
-class MeasurementController extends Controller
+class TreeMeasurementController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class MeasurementController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreMeasurementRequest $request)
+    public function store(StoreTreeMeasurementRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class MeasurementController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Measurement $measurement)
+    public function show(TreeMeasurement $treeMeasurement)
     {
         //
     }
@@ -43,7 +43,7 @@ class MeasurementController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Measurement $measurement)
+    public function edit(TreeMeasurement $treeMeasurement)
     {
         //
     }
@@ -51,7 +51,7 @@ class MeasurementController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateMeasurementRequest $request, Measurement $measurement)
+    public function update(UpdateTreeMeasurementRequest $request, TreeMeasurement $treeMeasurement)
     {
         //
     }
@@ -59,7 +59,7 @@ class MeasurementController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Measurement $measurement)
+    public function destroy(TreeMeasurement $treeMeasurement)
     {
         //
     }

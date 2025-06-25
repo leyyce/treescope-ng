@@ -17,30 +17,30 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property string $user_id
  * @property string $tree_species_id
  * @property string $tree_condition_id
+ * @property string $tree_location_confidence_id
  * @property Point $location
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\TreeCondition $treeCondition
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Measurement> $measurements
- * @property-read int|null $measurements_count
+ * @property-read \App\Models\TreeLocationConfidence $treeLocationConfidence
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TreeMeasurement> $treeMeasurements
+ * @property-read int|null $tree_measurements_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TreePhoto> $treePhotos
  * @property-read int|null $tree_photos_count
  * @property-read \App\Models\TreeSpecies $treeSpecies
+ * @property-read \App\Models\User $user
  * @method static \Database\Factories\TreeFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereTreeConditionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereTreeConditionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereTreeLocationConfidenceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereTreeSpeciesId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereUserId($value)
- * @property string $tree_location_confidence_id
- * @property-read \App\Models\TreeLocationConfidence $treeLocationConfidence
- * @property-read \App\Models\User $user
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereTreeLocationConfidenceId($value)
  * @mixin \Eloquent
  */
 class Tree extends Model
@@ -83,13 +83,13 @@ class Tree extends Model
         return $this->belongsTo(TreeLocationConfidence::class);
     }
 
-    public function measurements(): HasMany
+    public function treeMeasurements(): HasMany
     {
-        return $this->hasMany(Measurement::class);
+        return $this->hasMany(TreeMeasurement::class);
     }
 
     public function treePhotos(): HasManyThrough
     {
-        return $this->hasManyThrough(TreePhoto::class, Measurement::class);
+        return $this->hasManyThrough(TreePhoto::class, TreeMeasurement::class);
     }
 }

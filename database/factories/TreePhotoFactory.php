@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Measurement;
+use App\Models\TreeMeasurement;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,7 +19,7 @@ class TreePhotoFactory extends Factory
     public function definition(): array
     {
         return [
-            'measurement_id' => Measurement::inRandomOrder()->first() ?? Measurement::factory()->create(),
+            'measurement_id' => TreeMeasurement::inRandomOrder()->first() ?? TreeMeasurement::factory()->create(),
             'user_id' => User::inRandomOrder()->first() ?? User::factory()->create(),
             'path' => fake()->imageUrl(category: 'nature', word: 'tree'),
             'note' => fake()->text(),

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateMeasurementRequest extends FormRequest
+class StoreTreeMeasurementRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

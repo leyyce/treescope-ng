@@ -59,7 +59,7 @@ export interface Tree {
     user?: User;
     tree_species?: TreeSpecies;
     tree_condition?: TreeCondition;
-    measurements?: Measurement[];
+    tree_measurements?: TreeMeasurement[];
     tree_photos?: TreePhoto[];
 }
 
@@ -78,7 +78,7 @@ export interface TreeCondition {
     [key: string]: unknown;
 }
 
-export interface Measurement {
+export interface TreeMeasurement {
     id: string;
     tree_id: string;
     [key: string]: unknown;

@@ -485,7 +485,7 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
                                         <p><strong>Coordinates:</strong> {tree.location.coordinates[0]}, {tree.location.coordinates[1]} </p>
                                         <p><strong>Tree Condition:</strong> {tree.tree_condition?.name || 'N/A'}</p>
                                         <p><strong>Description:</strong> {tree.tree_condition?.description || 'No description available'}</p>
-                                        <p><strong>Measurement count:</strong> {tree.measurements?.length || 0}</p>
+                                        <p><strong>Measurement count:</strong> {tree.tree_measurements?.length || 0}</p>
                                         <p><strong>Added:</strong> {new Date(tree.created_at).toLocaleDateString()}</p>
                                         <p><strong>Created by:</strong> {tree.user?.username || 'Unknown'}</p>
                                         <Link href={route('trees.show', { tree: tree.id })}>Details</Link>
