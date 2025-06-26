@@ -4,10 +4,13 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import AppLayout from '@/layouts/app-layout';
+import LocationDisplay from '@/components/location-display';
 import type { BreadcrumbItem, TreeCondition, TreeSpecies } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { HelpCircle } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { Icon } from 'leaflet';
+import treeMarker from '../../../img/tree_marker.svg';
 
 interface TreeLocationConfidence {
     id: string;
@@ -21,10 +24,15 @@ interface AddTreeProps {
     treeLocationConfidences: TreeLocationConfidence[];
 }
 
-export default function AddTree({ treeSpecies, treeConditions, treeLocationConfidences }: AddTreeProps) {
-    const [address, setAddress] = useState<string>('');
-    const [isLoadingAddress, setIsLoadingAddress] = useState<boolean>(false);
+const treeIcon = new Icon({
+    iconUrl: treeMarker,
+    iconRetinaUrl: treeMarker,
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40],
+});
 
+export default function AddTree({ treeSpecies, treeConditions, treeLocationConfidences }: AddTreeProps) {
     const { data, setData, post, processing, errors } = useForm({
         tree_species_id: '',
         tree_condition_id: '',
@@ -57,33 +65,8 @@ export default function AddTree({ treeSpecies, treeConditions, treeLocationConfi
             };
 
             setData('location', JSON.stringify(geoJsonPoint));
-
-            // Reverse geocode the coordinates
-            void reverseGeocode(parseFloat(lat), parseFloat(lng));
         }
     }, [setData]);
-
-    // Reverse geocode coordinates to an address
-    const reverseGeocode = async (lat: number, lng: number) => {
-        setIsLoadingAddress(true);
-        try {
-            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`, {
-                signal: AbortSignal.timeout(5000),
-            });
-            const data = await response.json();
-
-            if (data && data.display_name) {
-                setAddress(data.display_name);
-            } else {
-                setAddress(`${lat.toFixed(6)}, ${lng.toFixed(6)}`);
-            }
-        } catch (error) {
-            console.error('Error reverse geocoding:', error);
-            setAddress(`${lat.toFixed(6)}, ${lng.toFixed(6)}`);
-        } finally {
-            setIsLoadingAddress(false);
-        }
-    };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -104,22 +87,19 @@ export default function AddTree({ treeSpecies, treeConditions, treeLocationConfi
                             {/* Location Information */}
                             <div className="space-y-2">
                                 <h3 className="text-lg font-medium">Location Information</h3>
-                                <div className="rounded-md border bg-muted/50 p-4">
-                                    <div className="mb-2 flex items-center gap-2">
-                                        {isLoadingAddress ? (
-                                            <div className="text-sm text-muted-foreground">Loading address...</div>
-                                        ) : (
-                                            <div className="text-sm font-medium">{address}</div>
-                                        )}
+                                {data.location ? (
+                                    <div className="rounded-md border bg-muted/50 p-4" style={{ height: '400px' }}>
+                                        <LocationDisplay
+                                            lat={JSON.parse(data.location).coordinates[0]}
+                                            lng={JSON.parse(data.location).coordinates[1]}
+                                            customMarkerIcon={treeIcon}
+                                        />
                                     </div>
-
-                                    {data.location && (
-                                        <div className="text-sm text-muted-foreground">
-                                            Coordinates: {JSON.parse(data.location).coordinates[1].toFixed(6)},{' '}
-                                            {JSON.parse(data.location).coordinates[0].toFixed(6)}
-                                        </div>
-                                    )}
-                                </div>
+                                ) : (
+                                    <div className="rounded-md border bg-muted/50 p-4">
+                                        <div className="text-sm text-muted-foreground">No location selected</div>
+                                    </div>
+                                )}
                                 {errors.location && <div className="text-sm text-destructive">{errors.location}</div>}
                             </div>
 

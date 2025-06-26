@@ -5,7 +5,7 @@ import type { Tree } from '@/types';
 import { Icon, LatLng, Map as LeafletMap } from 'leaflet';
 import { Locate, MapPin, Search, User, Calendar, Ruler, Trees, Info, MapPin as PinIcon, FileText } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from 'react-leaflet';
 
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
@@ -13,38 +13,10 @@ import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
 import { Link } from '@inertiajs/react';
 import treeMarker from '../../img/tree_marker.svg';
+import MapResizer from '@/components/map-resizer';
 
 // Make sure to add these to your CSS or import them in your main layout
 // import 'leaflet/dist/leaflet.css';
-
-function MapResizer() {
-    const map = useMap();
-
-    useEffect(() => {
-        // Handler to call on window resize
-        function handleResize() {
-            map.invalidateSize();
-        }
-
-        // Create ResizeObserver instance
-        const resizeObserver = new ResizeObserver(() => {
-            handleResize();
-        });
-
-        // Get the map container element
-        const mapContainer = map.getContainer();
-
-        // Observe the container
-        resizeObserver.observe(mapContainer);
-
-        // Clean up
-        return () => {
-            resizeObserver.disconnect();
-        };
-    }, [map]);
-
-    return null;
-}
 
 // Define the props interface for the component
 interface MapPickerProps {

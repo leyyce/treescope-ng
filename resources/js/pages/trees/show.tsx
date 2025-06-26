@@ -1,10 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
+import LocationDisplay from '@/components/location-display';
 import type { BreadcrumbItem, Paginator as PaginationType, Tree, TreeMeasurement, TreePhoto } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { InertiaPaginator } from '@/components/inertia_paginator';
+import { Icon } from 'leaflet';
+import treeMarker from '../../../img/tree_marker.svg';
 
 interface ShowTreeProps {
     tree: Tree;
@@ -14,6 +17,14 @@ interface ShowTreeProps {
 interface MeasurementCardProps {
     measurement: TreeMeasurement;
 }
+
+const treeIcon = new Icon({
+    iconUrl: treeMarker,
+    iconRetinaUrl: treeMarker,
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40],
+});
 
 function MeasurementCard({ measurement }: MeasurementCardProps) {
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
@@ -197,10 +208,12 @@ export default function ShowTree({ tree, measurements }: ShowTreeProps) {
                             {/* Location */}
                             <div className="space-y-2">
                                 <h3 className="text-lg font-medium">Location</h3>
-                                <div className="rounded-md border bg-muted/50 p-4">
-                                    <div className="text-sm">
-                                        Coordinates: {tree.location.coordinates[0].toFixed(6)}, {tree.location.coordinates[1].toFixed(6)}
-                                    </div>
+                                <div className="rounded-md border bg-muted/50 p-4" style={{ height: '400px' }}>
+                                    <LocationDisplay
+                                        lat={tree.location.coordinates[0]}
+                                        lng={tree.location.coordinates[1]}
+                                        customMarkerIcon={treeIcon}
+                                    />
                                 </div>
                             </div>
 
