@@ -4,7 +4,7 @@ import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, Paginator as PaginationType, Tree, TreeMeasurement, TreePhoto } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
-import { PaginationComponent } from '@/components/pagination-component';
+import { InertiaPaginator } from '@/components/inertia_paginator';
 
 interface ShowTreeProps {
     tree: Tree;
@@ -183,7 +183,7 @@ export default function ShowTree({ tree, measurements }: ShowTreeProps) {
                             </div>
 
                             {/* Measurements */}
-                            <div className="space-y-2">
+                            <div id="measurements-section" className="space-y-2">
                                 <h3 className="text-lg font-medium">Measurements</h3>
                                 {measurements.total > 0 ? (
                                     <div className="space-y-4">
@@ -194,7 +194,11 @@ export default function ShowTree({ tree, measurements }: ShowTreeProps) {
                                         </div>
 
                                         {measurements.total > 1 && (
-                                            <PaginationComponent paginator={measurements} only={['measurements']}></PaginationComponent>
+                                            <InertiaPaginator
+                                                paginator={measurements}
+                                                only={['measurements']}
+                                                scrollTarget="measurements-section"
+                                            />
                                         )}
                                     </div>
                                 ) : (

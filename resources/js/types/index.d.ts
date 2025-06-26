@@ -2,18 +2,24 @@ import { LucideIcon } from 'lucide-react';
 import type { Config } from 'ziggy-js';
 
 export interface Paginator<T> {
-    data: T[];
-    current_page: number;
-    from: number;
-    last_page: number;
-    per_page: number;
-    to: number;
     total: number;
+    per_page: number;
+    current_page: number;
+    last_page: number;
+    current_page_url: string;
+    first_page_url: string;
+    last_page_url: string;
+    next_page_url: string;
+    prev_page_url: string;
+    path: string;
+    from: number;
+    to: number;
     links: {
         url: string | undefined;
         label: string;
         active: boolean;
     }[];
+    data: T[];
 }
 
 export interface Auth {

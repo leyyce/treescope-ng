@@ -58,7 +58,9 @@ class TreeController extends Controller
         ]);
 
         // Paginate tree measurements
-        $perPage = 3; // Same as the frontend's measurementsPerPage
+        // Get the 'per_page' query parameter, defaulting to 12 if not provided
+        $perPage = request()->query('per_page', 12);
+
         $measurements = $tree->treeMeasurements()
             ->with(['user:id,username', 'treePhotos'])
             ->orderBy('created_at', 'desc')
