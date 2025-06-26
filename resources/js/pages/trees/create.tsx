@@ -8,7 +8,7 @@ import LocationDisplay from '@/components/location-display';
 import type { BreadcrumbItem, TreeCondition, TreeSpecies } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { HelpCircle } from 'lucide-react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Icon } from 'leaflet';
 import treeMarker from '../../../img/tree_marker.svg';
 
@@ -212,7 +212,10 @@ export default function AddTree({ treeSpecies, treeConditions, treeLocationConfi
                                 )}
                             </div>
 
-                            <div className="flex justify-end">
+                            <div className="flex justify-end space-x-2 pt-4">
+                                <Button type="button" variant="outline" onClick={() => window.history.back()} disabled={processing}>
+                                    Cancel
+                                </Button>
                                 <Button type="submit" disabled={processing}>
                                     {processing ? 'Saving...' : 'Save Tree'}
                                 </Button>
