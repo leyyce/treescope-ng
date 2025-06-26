@@ -85,12 +85,16 @@ export default function CreateTreeMeasurement({ tree }: CreateTreeMeasurementPro
     };
 
     const handleNoteChange = (id: number, note: string) => {
-        setPhotoFields((prevFields) => prevFields.map((field) => (field.id === id ? { ...field, note } : field)));
+        // Limit note to 500 characters, but allow pasting by truncating
+        const truncatedNote = note.substring(0, 500);
+        setPhotoFields((prevFields) => prevFields.map((field) => (field.id === id ? { ...field, note: truncatedNote } : field)));
     };
 
     const addPhotoField = () => {
-        setPhotoFields([...photoFields, { id: nextPhotoId, file: null, note: '' }]);
-        setNextPhotoId(nextPhotoId + 1);
+        if (photoFields.length < 10) {
+            setPhotoFields([...photoFields, { id: nextPhotoId, file: null, note: '' }]);
+            setNextPhotoId(nextPhotoId + 1);
+        }
     };
 
     const removePhotoField = (id: number) => {
@@ -244,24 +248,36 @@ export default function CreateTreeMeasurement({ tree }: CreateTreeMeasurementPro
                             {/* Photos */}
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between">
-                                    <Label className="text-base">
-                                        Photos
-                                        <TooltipProvider>
-                                            <Tooltip>
-                                                <TooltipTrigger asChild>
-                                                    <Button variant="ghost" size="icon" className="ml-1 h-5 w-5">
-                                                        <HelpCircle className="h-4 w-4" />
-                                                    </Button>
-                                                </TooltipTrigger>
-                                                <TooltipContent>
-                                                    <p className="max-w-xs">
-                                                        Upload at least 2 photos of the tree. Each photo can have an optional note.
-                                                    </p>
-                                                </TooltipContent>
-                                            </Tooltip>
-                                        </TooltipProvider>
-                                    </Label>
-                                    <Button type="button" variant="outline" size="sm" onClick={addPhotoField} className="flex items-center">
+                                    <div>
+                                        <Label className="text-base">
+                                            Photos
+                                            <TooltipProvider>
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <Button variant="ghost" size="icon" className="ml-1 h-5 w-5">
+                                                            <HelpCircle className="h-4 w-4" />
+                                                        </Button>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>
+                                                        <p className="max-w-xs">
+                                                            Upload at least 2 photos of the tree. Each photo can have an optional note.
+                                                        </p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            </TooltipProvider>
+                                        </Label>
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            {photoFields.length} of 10 photos maximum
+                                        </p>
+                                    </div>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={addPhotoField}
+                                        disabled={photoFields.length >= 10}
+                                        className="flex items-center"
+                                    >
                                         <Plus className="mr-1 h-4 w-4" /> Add Photo
                                     </Button>
                                 </div>
@@ -300,6 +316,11 @@ export default function CreateTreeMeasurement({ tree }: CreateTreeMeasurementPro
                                             onChange={(e) => handleNoteChange(field.id, e.target.value)}
                                             className="h-20"
                                         />
+                                        <div className="flex justify-end">
+                                            <p className="text-xs text-gray-500 mt-1">
+                                                {field.note.length} / 500 characters
+                                            </p>
+                                        </div>
                                         {(errors as Record<string, string>)[`photos.${index}.note`] && (
                                             <p className="mt-1 text-sm text-red-500">{(errors as Record<string, string>)[`photos.${index}.note`]}</p>
                                         )}
@@ -331,10 +352,19 @@ export default function CreateTreeMeasurement({ tree }: CreateTreeMeasurementPro
                                 <Textarea
                                     id="note"
                                     value={data.note}
-                                    onChange={(e) => setData('note', e.target.value)}
+                                    onChange={(e) => {
+                                        // Limit note to 1000 characters, but allow pasting by truncating
+                                        const truncatedValue = e.target.value.substring(0, 1000);
+                                        setData('note', truncatedValue);
+                                    }}
                                     placeholder="Optional note about this measurement"
                                     className="h-32"
                                 />
+                                <div className="flex justify-end">
+                                    <p className="text-xs text-gray-500 mt-1">
+                                        {data.note.length} / 1000 characters
+                                    </p>
+                                </div>
                                 {errors.note && <p className="mt-1 text-sm text-red-500">{errors.note}</p>}
                             </div>
 
