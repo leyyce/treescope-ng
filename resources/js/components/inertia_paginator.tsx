@@ -104,9 +104,9 @@ export function InertiaPaginator<T>({ paginator, only = [], scrollTarget }: Pagi
     };
 
     return (
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-4 w-full max-w-full overflow-hidden px-1">
             <Pagination>
-                <PaginationContent>
+                <PaginationContent className="flex-wrap justify-center">
                     {paginator.links.map((link, index) => {
                         // Item: Previous Link
                         if (link.label.includes('Previous')) {
@@ -165,13 +165,13 @@ export function InertiaPaginator<T>({ paginator, only = [], scrollTarget }: Pagi
                     })}
                 </PaginationContent>
             </Pagination>
-            <div className="flex items-center justify-center space-x-2">
+            <div className="flex flex-wrap items-center justify-center gap-2">
                 <span className="text-sm text-muted-foreground">Items per page:</span>
                 <Input
                     type="number"
                     value={inputPerPage}
                     onChange={handlePerPageChange}
-                    className="w-16 h-8"
+                    className="w-16 h-8 min-w-0"
                 />
                 <Button
                     size="sm"
