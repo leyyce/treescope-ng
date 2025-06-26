@@ -28,19 +28,19 @@ function MeasurementCard({ measurement }: MeasurementCardProps) {
         }
     }, [measurement]);
 
-    useEffect(() => {
-        if (photos.length <= 1) return;
-
-        const interval = setInterval(() => {
-            setIsTransitioning(true);
-            setTimeout(() => {
-                setCurrentPhotoIndex((prevIndex) => (prevIndex + 1) % photos.length);
-                setIsTransitioning(false);
-            }, 500); // Transition duration
-        }, 5000); // Change image every 5 seconds
-
-        return () => clearInterval(interval);
-    }, [photos.length]);
+    const navigatePhoto = (direction: 'prev' | 'next') => {
+        setIsTransitioning(true);
+        setTimeout(() => {
+            setCurrentPhotoIndex((prevIndex) => {
+                if (direction === 'next') {
+                    return (prevIndex + 1) % photos.length;
+                } else {
+                    return (prevIndex - 1 + photos.length) % photos.length;
+                }
+            });
+            setIsTransitioning(false);
+        }, 300); // Transition duration
+    };
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString();
@@ -90,6 +90,37 @@ function MeasurementCard({ measurement }: MeasurementCardProps) {
                             alt={`Tree photo ${currentPhotoIndex + 1}`}
                             className="h-full w-full object-cover"
                         />
+
+                        {/* Navigation buttons */}
+                        {photos.length > 1 && (
+                            <>
+                                {/* Left button - hide if at first photo */}
+                                {currentPhotoIndex > 0 && (
+                                    <button
+                                        onClick={() => navigatePhoto('prev')}
+                                        className="absolute left-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70"
+                                        aria-label="Previous photo"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M15 18l-6-6 6-6" />
+                                        </svg>
+                                    </button>
+                                )}
+
+                                {/* Right button - hide if at last photo */}
+                                {currentPhotoIndex < photos.length - 1 && (
+                                    <button
+                                        onClick={() => navigatePhoto('next')}
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70"
+                                        aria-label="Next photo"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M9 18l6-6-6-6" />
+                                        </svg>
+                                    </button>
+                                )}
+                            </>
+                        )}
                     </div>
                     {photos.length > 1 && (
                         <div className="absolute bottom-2 left-0 right-0 flex justify-center space-x-1">
