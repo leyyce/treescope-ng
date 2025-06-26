@@ -70,12 +70,12 @@ function MeasurementCard({ measurement }: MeasurementCardProps) {
                         <p className="text-sm">{measurement.trunk_diameter} cm</p>
                     </div>
                 </div>
-                {measurement.note && (
-                    <div>
-                        <h4 className="text-sm font-medium">Notes</h4>
-                        <p className="text-sm text-muted-foreground">{measurement.note}</p>
-                    </div>
-                )}
+                <div>
+                    <h4 className="text-sm font-medium">Notes</h4>
+                    <p className="text-sm text-muted-foreground h-16 overflow-y-auto">
+                        {measurement.note || <span className="text-muted-foreground/50">No notes available</span>}
+                    </p>
+                </div>
             </div>
 
             {photos.length > 0 && (
