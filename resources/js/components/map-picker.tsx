@@ -452,13 +452,13 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
                             <Marker key={tree.id} position={[lat, lng]} icon={treeIcon}>
                                 <Popup className="tree-popup">
                                     <div className={`${isMobile ? 'max-w-[280px]' : 'max-w-[350px]'} overflow-y-auto overflow-x-hidden`}>
-                                        <div className="mb-3 rounded-t-md bg-green-50 p-2 -m-2 mb-2">
+                                        <div className="mb-3 rounded-md bg-green-100 p-0.1 pb-0.1">
                                             <div className="flex items-center">
                                                 <Trees className="mr-2 h-5 w-5 text-green-700" />
                                                 <h3 className="text-lg font-bold text-green-800">{tree.tree_species?.name || 'Unknown Tree Type'}</h3>
                                             </div>
                                             {tree.tree_species?.scientific_name && (
-                                                <p className="mt-1 text-sm italic text-green-700">{tree.tree_species.scientific_name}</p>
+                                                <p className="mt-1 text-sm italic text-green-700 pb-1 pl-1">{tree.tree_species.scientific_name}</p>
                                             )}
                                         </div>
 

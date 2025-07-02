@@ -13,6 +13,6 @@ class TreePhotoSeeder extends Seeder
      */
     public function run(): void
     {
-        TreePhoto::factory(500)->create();
+        TreePhoto::factory(25000)->create();
     }
 }

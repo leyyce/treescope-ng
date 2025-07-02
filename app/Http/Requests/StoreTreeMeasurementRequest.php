@@ -36,7 +36,7 @@ class StoreTreeMeasurementRequest extends FormRequest
             'height' => ['required', 'numeric', 'min:0.01', 'max:999.99'],
             'inclination' => ['required', 'integer', 'min:0', 'max:90'],
             'note' => ['nullable', 'string', 'max:1000'],
-            'photos' => ['required', 'array', 'between:1,10'],
+            'photos' => ['required', 'array', 'between:2,10'],
             'photos.*.file' => ['required', 'file', 'image', 'max:10240'], // 10MB max
             'photos.*.note' => ['nullable', 'string', 'max:500'],
         ];

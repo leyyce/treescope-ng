@@ -13,6 +13,6 @@ class TreeMeasurementSeeder extends Seeder
      */
     public function run(): void
     {
-        TreeMeasurement::factory(250)->create();
+        TreeMeasurement::factory(5000)->create();
     }
 }
