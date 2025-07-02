@@ -1,49 +1,22 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Icon, LatLng, Map as LeafletMap } from 'leaflet';
-import { Locate, MapPin, Search } from 'lucide-react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { MapContainer, Marker, TileLayer, useMap, useMapEvents, Popup } from 'react-leaflet';
 import { useIsMobile } from '@/hooks/use-mobile';
 import type { Tree } from '@/types';
+import { Icon, LatLng, Map as LeafletMap } from 'leaflet';
+import { Locate, MapPin, Search, User, Calendar, Ruler, Trees, Info, MapPin as PinIcon, FileText } from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from 'react-leaflet';
 
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-import treeMarker from '../../img/tree_marker.svg'
+import { Link } from '@inertiajs/react';
+import treeMarker from '../../img/tree_marker.svg';
+import MapResizer from '@/components/map-resizer';
 
 // Make sure to add these to your CSS or import them in your main layout
 // import 'leaflet/dist/leaflet.css';
-
-function MapResizer() {
-    const map = useMap();
-
-    useEffect(() => {
-        // Handler to call on window resize
-        function handleResize() {
-            map.invalidateSize();
-        }
-
-        // Create ResizeObserver instance
-        const resizeObserver = new ResizeObserver(() => {
-            handleResize();
-        });
-
-        // Get the map container element
-        const mapContainer = map.getContainer();
-
-        // Observe the container
-        resizeObserver.observe(mapContainer);
-
-        // Clean up
-        return () => {
-            resizeObserver.disconnect();
-        };
-    }, [map]);
-
-    return null;
-}
 
 // Define the props interface for the component
 interface MapPickerProps {
@@ -129,7 +102,7 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
         void reverseGeocode(initialLocation.lat, initialLocation.lng);
 
         // Update the parent component with the initial location
-        onChange?.({ ...initialLocation, accuracy: null });
+        // onChange?.({ ...initialLocation, accuracy: null });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -182,7 +155,7 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
             e.preventDefault();
             const indexToSelect = selectedSuggestionIndex >= 0 ? selectedSuggestionIndex : -1;
             if (indexToSelect < 0) {
-                handleSubmit(e)
+                handleSubmit(e);
                 return;
             }
             handleSuggestionSelect(suggestions[indexToSelect]);
@@ -403,10 +376,10 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
     };
 
     return (
-        <div className={`flex flex-col h-full ${className}`}>
+        <div className={`flex h-full flex-col ${className}`}>
             {/* Search bar */}
-            <form onSubmit={handleSubmit} className="flex flex-wrap gap-2 mb-4">
-                <div className="relative flex-grow min-w-[200px]">
+            <form onSubmit={handleSubmit} className="mb-4 flex flex-wrap gap-2">
+                <div className="relative min-w-[200px] flex-grow">
                     <Input
                         ref={searchInputRef}
                         type="text"
@@ -452,12 +425,12 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
             </form>
 
             {/* Map container */}
-            <div className="flex-1 min-h-[300px] w-full rounded-md border">
+            <div className="min-h-[300px] w-full flex-1 rounded-md border">
                 <MapContainer center={[location.lat, location.lng]} zoom={13} style={{ height: '100%', width: '100%', zIndex: 10 }} ref={mapRef}>
                     {/* ESRI World Imagery Tile Layer */}
                     <TileLayer
                         url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-                        attribution="Tiles &copy; <a href='http://www.esri.com/'>Esri</a> &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+                        attribution="Tiles &copy; <a href='https://www.esri.com/'>Esri</a> &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
                         maxZoom={20}
                     />
 
@@ -477,15 +450,74 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
                         const lng = tree.location.coordinates[1];
                         return (
                             <Marker key={tree.id} position={[lat, lng]} icon={treeIcon}>
-                                <Popup>
-                                    <div className="p-2">
-                                        <h3 className="font-bold mb-2">{tree.tree_type?.name || 'Unknown Tree Type'}</h3>
-                                        <p><strong>Scientific Name:</strong> {tree.tree_type?.scientific_name || 'N/A'}</p>
-                                        <p><strong>Coordinates:</strong> {tree.location.coordinates[0]}, {tree.location.coordinates[1]} </p>
-                                        <p><strong>Health Status:</strong> {tree.health_status?.name || 'N/A'}</p>
-                                        <p><strong>Description:</strong> {tree.health_status?.description || 'No description available'}</p>
-                                        <p><strong>Measurement count:</strong> {tree.measurements?.length || 0}</p>
-                                        <p><strong>Added:</strong> {new Date(tree.created_at).toLocaleDateString()}</p>
+                                <Popup className="tree-popup">
+                                    <div className={`${isMobile ? 'max-w-[280px]' : 'max-w-[350px]'} overflow-y-auto overflow-x-hidden`}>
+                                        <div className="mb-3 rounded-md bg-green-100 p-0.1 pb-0.1">
+                                            <div className="flex items-center">
+                                                <Trees className="mr-2 h-5 w-5 text-green-700" />
+                                                <h3 className="text-lg font-bold text-green-800">{tree.tree_species?.name || 'Unknown Tree Type'}</h3>
+                                            </div>
+                                            {tree.tree_species?.scientific_name && (
+                                                <p className="mt-1 text-sm italic text-green-700 pb-1 pl-1">{tree.tree_species.scientific_name}</p>
+                                            )}
+                                        </div>
+
+                                        <div className="mb-3 grid grid-cols-1 gap-2 text-sm">
+                                            <div className="flex items-start">
+                                                <PinIcon className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0 text-gray-500" />
+                                                <div className="flex flex-col">
+                                                    <span className="font-medium text-gray-700">Coordinates:</span>
+                                                    <span className="truncate text-gray-600">{tree.location.coordinates[0].toFixed(4)}, {tree.location.coordinates[1].toFixed(4)}</span>
+                                                </div>
+                                            </div>
+
+                                            {tree.tree_condition?.name && (
+                                                <div className="flex items-start">
+                                                    <Info className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0 text-gray-500" />
+                                                    <div className="flex flex-col">
+                                                        <span className="font-medium text-gray-700">Condition:</span>
+                                                        <span className="text-gray-600">{tree.tree_condition.name}</span>
+                                                        {tree.tree_condition?.description && (
+                                                            <span className={`text-gray-500 text-xs mt-0.5`}>
+                                                                {tree.tree_condition.description}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            <div className="flex items-start">
+                                                <Ruler className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0 text-gray-500" />
+                                                <div className="flex flex-col">
+                                                    <span className="font-medium text-gray-700">Measurements:</span>
+                                                    <span className="text-gray-600">{tree.tree_measurements?.length || 0}</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-start">
+                                                <Calendar className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0 text-gray-500" />
+                                                <div className="flex flex-col">
+                                                    <span className="font-medium text-gray-700">Added:</span>
+                                                    <span className="text-gray-600">{new Date(tree.created_at).toLocaleDateString()}</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-start">
+                                                <User className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0 text-gray-500" />
+                                                <div className="flex flex-col">
+                                                    <span className="font-medium text-gray-700">Created by:</span>
+                                                    <span className="text-gray-600">{tree.user?.username || 'Unknown'}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <Link
+                                            href={route('trees.show', { tree: tree.id })}
+                                            className="mt-2 inline-flex w-full items-center justify-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                                        >
+                                            <FileText className="mr-2 h-4 w-4" />
+                                            View Tree Details
+                                        </Link>
                                     </div>
                                 </Popup>
                             </Marker>
@@ -499,11 +531,11 @@ export default function MapPicker({ value, onChange, className = '', trees = [] 
             </div>
 
             {/* Display the current coordinates and accuracy if available */}
-            <div className="text-sm text-muted-foreground mt-2 flex-shrink-0">
+            <div className="mt-2 flex-shrink-0 text-sm text-muted-foreground">
                 <div className="truncate">
                     Selected coordinates: {location.lat.toFixed(6)}, {location.lng.toFixed(6)}
                 </div>
-                {accuracy !== null && <div className="truncate">Accuracy: {accuracy.toFixed(2)} meters</div>}
+                <div className="truncate">Accuracy: {accuracy !== null ? accuracy.toFixed(2) + 'meters' : 'Manual selection'}</div>
             </div>
         </div>
     );

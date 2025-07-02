@@ -13,6 +13,6 @@ class TreeSeeder extends Seeder
      */
     public function run(): void
     {
-        Tree::factory(250)->create();
+        Tree::factory(50)->create();
     }
 }

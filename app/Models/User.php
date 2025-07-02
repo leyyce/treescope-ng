@@ -13,7 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 /**
- * 
+ *
  *
  * @property string $id
  * @property string $username
@@ -29,12 +29,12 @@ use Illuminate\Notifications\Notifiable;
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Measurement> $measurements
- * @property-read int|null $measurements_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Role> $roles
  * @property-read int|null $roles_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TreeMeasurement> $treeMeasurements
+ * @property-read int|null $tree_measurements_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TreePhoto> $treePhotos
  * @property-read int|null $tree_photos_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tree> $trees
@@ -119,9 +119,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Tree::class);
     }
 
-    public function measurements(): HasMany
+    public function treeMeasurements(): HasMany
     {
-        return $this->hasMany(Measurement::class);
+        return $this->hasMany(TreeMeasurement::class);
     }
 
     public function treePhotos(): HasMany

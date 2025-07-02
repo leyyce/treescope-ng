@@ -11,30 +11,34 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 /**
- * 
+ *
  *
  * @property string $id
  * @property string $user_id
- * @property string $tree_type_id
- * @property string $health_status_id
+ * @property string $tree_species_id
+ * @property string $tree_condition_id
+ * @property string $tree_location_confidence_id
  * @property Point $location
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\HealthStatus $healthStatus
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Measurement> $measurements
- * @property-read int|null $measurements_count
+ * @property-read \App\Models\TreeCondition $treeCondition
+ * @property-read \App\Models\TreeLocationConfidence $treeLocationConfidence
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TreeMeasurement> $treeMeasurements
+ * @property-read int|null $tree_measurements_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TreePhoto> $treePhotos
  * @property-read int|null $tree_photos_count
- * @property-read \App\Models\TreeType $treeType
+ * @property-read \App\Models\TreeSpecies $treeSpecies
+ * @property-read \App\Models\User $user
  * @method static \Database\Factories\TreeFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereHealthStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereLocation($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereTreeTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereTreeConditionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereTreeLocationConfidenceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereTreeSpeciesId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Tree whereUserId($value)
  * @mixin \Eloquent
@@ -44,29 +48,48 @@ class Tree extends Model
     /** @use HasFactory<\Database\Factories\TreeFactory> */
     use HasFactory, HasUuids;
 
+    protected $fillable = [
+        'user_id',
+        'location',
+        'tree_species_id',
+        'tree_condition_id',
+        'tree_location_confidence_id',
+    ];
+
     protected function casts(): array
     {
         return [
             'location' => Point::class,
         ];
     }
-    public function treeType(): BelongsTo
+
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(TreeType::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function healthStatus(): BelongsTo
+    public function treeSpecies(): BelongsTo
     {
-        return $this->belongsTo(HealthStatus::class);
+        return $this->belongsTo(TreeSpecies::class);
     }
 
-    public function measurements(): HasMany
+    public function treeCondition(): BelongsTo
     {
-        return $this->hasMany(Measurement::class);
+        return $this->belongsTo(TreeCondition::class);
+    }
+
+    public function treeLocationConfidence(): BelongsTo
+    {
+        return $this->belongsTo(TreeLocationConfidence::class);
+    }
+
+    public function treeMeasurements(): HasMany
+    {
+        return $this->hasMany(TreeMeasurement::class);
     }
 
     public function treePhotos(): HasManyThrough
     {
-        return $this->hasManyThrough(TreePhoto::class, Measurement::class);
+        return $this->hasManyThrough(TreePhoto::class, TreeMeasurement::class);
     }
 }

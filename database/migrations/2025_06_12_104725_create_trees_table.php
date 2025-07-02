@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,9 +13,10 @@ return new class extends Migration
         Schema::create('trees', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
-            $table->foreignUuid('tree_type_id')->constrained()->onDelete('cascade');
-            $table->foreignUuid('health_status_id')->constrained()->onDelete('cascade');
-            $table->magellanPoint('location');
+            $table->foreignUuid('tree_species_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('tree_condition_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('tree_location_confidence_id')->constrained()->onDelete('cascade');
+            $table->magellanPoint('location')->unique();
             $table->timestamps();
         });
     }

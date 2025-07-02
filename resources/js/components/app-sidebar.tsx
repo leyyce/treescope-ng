@@ -23,7 +23,7 @@ const mainNavItems: NavItem[] = [
 const footerNavItems: NavItem[] = [
     {
         title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
+        href: 'https://github.com/leyyce/treescope-ng/',
         icon: Folder,
     },
     {
@@ -40,7 +40,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
+                            <Link href={route('dashboard')} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>

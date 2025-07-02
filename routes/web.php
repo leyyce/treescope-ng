@@ -14,12 +14,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::get('/tree-map', function () {
-        return Inertia::render('treemap', [
-            'trees' => Tree::with(['treeType', 'healthStatus', 'measurements'])->get()
+        return Inertia::render('tree-map', [
+            'trees' => Tree::with(['treeSpecies', 'treeCondition', 'treeMeasurements', 'user:id,username'])->get()
         ]);
     })->name('tree-map');
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
-require __DIR__.'/trees.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';
+require __DIR__ . '/trees.php';

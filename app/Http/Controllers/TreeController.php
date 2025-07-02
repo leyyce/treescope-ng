@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Tree;
 use App\Http\Requests\StoreTreeRequest;
 use App\Http\Requests\UpdateTreeRequest;
+use App\Models\TreeCondition;
+use App\Models\TreeLocationConfidence;
+use App\Models\TreeSpecies;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class TreeController extends Controller
@@ -22,7 +26,11 @@ class TreeController extends Controller
      */
     public function create()
     {
-        return Inertia::render('trees/add');
+        return Inertia::render('trees/create', [
+            'treeSpecies' => TreeSpecies::all(),
+            'treeConditions' => TreeCondition::all(),
+            'treeLocationConfidences' => TreeLocationConfidence::all(),
+        ]);
     }
 
     /**
@@ -30,7 +38,9 @@ class TreeController extends Controller
      */
     public function store(StoreTreeRequest $request)
     {
-        $tree = Tree::create($request->validated());
+        $validatedData = $request->validated();
+        $validatedData['user_id'] = auth()->id();
+        $tree = Tree::create($validatedData);
         return to_route('trees.show', $tree->id);
     }
 
@@ -39,8 +49,26 @@ class TreeController extends Controller
      */
     public function show(Tree $tree)
     {
+        // Load tree with basic relationships (excluding measurements)
+        $tree->load([
+            'treeSpecies',
+            'treeCondition',
+            'treeLocationConfidence',
+            'user:id,username',
+        ]);
+
+        // Paginate tree measurements
+        // Get the 'per_page' query parameter, defaulting to 12 if not provided
+        $perPage = request()->query('per_page', 12);
+
+        $measurements = $tree->treeMeasurements()
+            ->with(['user:id,username', 'treePhotos'])
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+
         return Inertia::render('trees/show', [
             'tree' => $tree,
+            'measurements' => $measurements,
         ]);
     }
 

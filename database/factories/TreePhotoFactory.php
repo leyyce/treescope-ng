@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Measurement;
+use App\Models\TreeMeasurement;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,10 +18,23 @@ class TreePhotoFactory extends Factory
      */
     public function definition(): array
     {
+        $mock_paths = [
+            'tree-photos/examples/Tree1.jpg',
+            'tree-photos/examples/Tree2.jpg',
+            'tree-photos/examples/Tree3.jpg',
+            'tree-photos/examples/Tree4.jpg',
+            'tree-photos/examples/Tree5.jpg',
+            'tree-photos/examples/Tree6.jpg',
+            'tree-photos/examples/Tree7.jpg',
+            'tree-photos/examples/Tree8.jpg',
+            'tree-photos/examples/Tree9.jpg',
+            'tree-photos/examples/Tree10.jpg',
+        ];
+
         return [
-            'measurement_id' => Measurement::inRandomOrder()->first() ?? Measurement::factory()->create(),
+            'tree_measurement_id' => TreeMeasurement::inRandomOrder()->first() ?? TreeMeasurement::factory()->create(),
             'user_id' => User::inRandomOrder()->first() ?? User::factory()->create(),
-            'path' => fake()->imageUrl(category: 'nature', word: 'tree'),
+            'path' => $mock_paths[array_rand($mock_paths)],
             'note' => fake()->text(),
         ];
     }

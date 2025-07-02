@@ -16,10 +16,11 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             TrustLevelSeeder::class,
             UserSeeder::class,
-            TreeTypeSeeder::class,
-            HealthStatusSeeder::class,
+            TreeSpeciesSeeder::class,
+            TreeConditionSeeder::class,
+            TreeLocationConfidenceSeeder::class,
             TreeSeeder::class,
-            MeasurementSeeder::class,
+            TreeMeasurementSeeder::class,
             TreePhotoSeeder::class,
         ]);
     }

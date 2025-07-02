@@ -2,8 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\HealthStatus;
-use App\Models\TreeType;
+use App\Models\TreeCondition;
+use App\Models\TreeLocationConfidence;
+use App\Models\TreeSpecies;
 use App\Models\User;
 use Clickbar\Magellan\Data\Geometries\Point;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,8 +23,9 @@ class TreeFactory extends Factory
     {
         return [
             'user_id' => User::inRandomOrder()->first() ?? User::factory()->create(),
-            'tree_type_id' => TreeType::inRandomOrder()->first() ?? TreeType::factory()->create(),
-            'health_status_id' => HealthStatus::inRandomOrder()->first() ?? HealthStatus::factory()->create(),
+            'tree_species_id' => TreeSpecies::inRandomOrder()->first() ?? TreeSpecies::factory()->create(),
+            'tree_condition_id' => TreeCondition::inRandomOrder()->first() ?? TreeCondition::factory()->create(),
+            'tree_location_confidence_id' => TreeLocationConfidence::inRandomOrder()->first() ?? TreeLocationConfidence::factory()->create(),
             'location' => Point::makeGeodetic(fake()->longitude(), fake()->latitude()),
         ];
     }

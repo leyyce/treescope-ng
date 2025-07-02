@@ -1,6 +1,27 @@
 import { LucideIcon } from 'lucide-react';
 import type { Config } from 'ziggy-js';
 
+export interface Paginator<T> {
+    total: number;
+    per_page: number;
+    current_page: number;
+    last_page: number;
+    current_page_url: string;
+    first_page_url: string;
+    last_page_url: string;
+    next_page_url: string;
+    prev_page_url: string;
+    path: string;
+    from: number;
+    to: number;
+    links: {
+        url: string | undefined;
+        label: string;
+        active: boolean;
+    }[];
+    data: T[];
+}
+
 export interface Auth {
     user: User;
 }
@@ -28,6 +49,7 @@ export interface SharedData {
     auth: Auth;
     ziggy: Config & { location: string };
     sidebarOpen: boolean;
+
     [key: string]: unknown;
 }
 
@@ -42,49 +64,71 @@ export interface User {
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
-    [key: string]: unknown; // This allows for additional properties...
+
+    [key: string]: unknown;
 }
 
 export interface Tree {
     id: string;
     user_id: string;
-    tree_type_id: string;
-    health_status_id: string;
+    tree_species_id: string;
+    tree_condition_id: string;
     location: {
         type: string;
         coordinates: [number, number]; // [longitude, latitude]
     };
     created_at: string;
     updated_at: string;
-    tree_type?: TreeType;
-    health_status?: HealthStatus;
-    measurements?: Measurement[];
+    user?: User;
+    tree_species?: TreeSpecies;
+    tree_condition?: TreeCondition;
+    tree_measurements?: TreeMeasurement[];
     tree_photos?: TreePhoto[];
 }
 
-export interface TreeType {
+export interface TreeSpecies {
     id: string;
     name: string;
     scientific_name: string;
     description: string;
+
     [key: string]: unknown;
 }
 
-export interface HealthStatus {
+export interface TreeCondition {
     id: string;
     name: string;
     description: string;
+
     [key: string]: unknown;
 }
 
-export interface Measurement {
+export interface TreeMeasurement {
     id: string;
     tree_id: string;
+    user_id: string;
+    height: string;
+    inclination: number;
+    trunk_diameter: number;
+    note: string | null;
+    tree: Tree;
+    user: User;
+    created_at: string;
+    updated_at: string;
+    tree_photos: TreePhoto[];
+
     [key: string]: unknown;
 }
 
 export interface TreePhoto {
     id: string;
-    measurement_id: string;
+    tree_measurement_id: string;
+    user_id: string;
+    path: string;
+    url: string;
+    note: string | null;
+    created_at: string;
+    updated_at: string;
+
     [key: string]: unknown;
 }
