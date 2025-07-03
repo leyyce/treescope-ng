@@ -43,6 +43,10 @@ export interface NavItem {
     href: string;
     icon?: LucideIcon | null;
     isActive?: boolean;
+    // Optional permissions required to access this item
+    requiredPermissions?: string[];
+    // Optional roles required to access this item
+    requiredRoles?: string[];
 }
 
 export interface SharedData {

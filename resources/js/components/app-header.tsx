@@ -8,38 +8,16 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { UserMenuContent } from '@/components/user-menu-content';
 import { useInitials } from '@/hooks/use-initials';
+import { usePermissions } from '@/hooks/use-permissions';
 import { cn } from '@/lib/utils';
-import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
+import { type BreadcrumbItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Menu, Search, Trees } from 'lucide-react';
-import AppLogo from './app-logo';
+import { Menu, Search } from 'lucide-react';
+import { usePanelView } from '@/contexts/panel-view-context';
 import AppLogoIcon from './app-logo-icon';
+import AppLogoDropdown from './app-logo-dropdown';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-        icon: LayoutGrid,
-    },
-    {
-        title: 'Tree Map',
-        href: '/tree-map',
-        icon: Trees,
-    }
-];
-
-const rightNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/leyyce/treescope-ng/',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
-];
+// Navigation items are now managed by the panel view context
 
 const activeItemStyles = 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100';
 
@@ -51,6 +29,70 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
     const getInitials = useInitials();
+    const { currentView } = usePanelView();
+    const { hasPermission, hasRole } = usePermissions();
+
+    // Filter mainNavItems based on permissions and roles
+    const filteredMainNavItems = currentView.mainNavItems.filter(item => {
+        // If the item doesn't have any permission or role requirements, it's accessible to everyone
+        if (!item.requiredPermissions && !item.requiredRoles) {
+            return true;
+        }
+
+        // Check if the user has any of the required permissions
+        if (item.requiredPermissions && item.requiredPermissions.length > 0) {
+            const hasRequiredPermission = item.requiredPermissions.some(permission =>
+                hasPermission(permission)
+            );
+            if (hasRequiredPermission) {
+                return true;
+            }
+        }
+
+        // Check if the user has any of the required roles
+        if (item.requiredRoles && item.requiredRoles.length > 0) {
+            const hasRequiredRole = item.requiredRoles.some(role =>
+                hasRole(role)
+            );
+            if (hasRequiredRole) {
+                return true;
+            }
+        }
+
+        // If the item has requirements but the user doesn't meet any of them, it's not accessible
+        return false;
+    });
+
+    // Filter footerNavItems based on permissions and roles
+    const filteredFooterNavItems = currentView.footerNavItems ? currentView.footerNavItems.filter(item => {
+        // If the item doesn't have any permission or role requirements, it's accessible to everyone
+        if (!item.requiredPermissions && !item.requiredRoles) {
+            return true;
+        }
+
+        // Check if the user has any of the required permissions
+        if (item.requiredPermissions && item.requiredPermissions.length > 0) {
+            const hasRequiredPermission = item.requiredPermissions.some(permission =>
+                hasPermission(permission)
+            );
+            if (hasRequiredPermission) {
+                return true;
+            }
+        }
+
+        // Check if the user has any of the required roles
+        if (item.requiredRoles && item.requiredRoles.length > 0) {
+            const hasRequiredRole = item.requiredRoles.some(role =>
+                hasRole(role)
+            );
+            if (hasRequiredRole) {
+                return true;
+            }
+        }
+
+        // If the item has requirements but the user doesn't meet any of them, it's not accessible
+        return false;
+    }) : undefined;
     return (
         <>
             <div className="border-b border-sidebar-border/80">
@@ -71,7 +113,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                 <div className="flex h-full flex-1 flex-col space-y-4 p-4">
                                     <div className="flex h-full flex-col justify-between text-sm">
                                         <div className="flex flex-col space-y-4">
-                                            {mainNavItems.map((item) => (
+                                            {filteredMainNavItems.map((item) => (
                                                 <Link key={item.title} href={item.href} className="flex items-center space-x-2 font-medium">
                                                     {item.icon && <Icon iconNode={item.icon} className="h-5 w-5" />}
                                                     <span>{item.title}</span>
@@ -80,7 +122,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                         </div>
 
                                         <div className="flex flex-col space-y-4">
-                                            {rightNavItems.map((item) => (
+                                            {filteredFooterNavItems && filteredFooterNavItems.map((item) => (
                                                 <a
                                                     key={item.title}
                                                     href={item.href}
@@ -99,15 +141,15 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                         </Sheet>
                     </div>
 
-                    <Link href={route('dashboard')} prefetch className="flex items-center space-x-2">
-                        <AppLogo />
-                    </Link>
+                    <div className="flex items-center space-x-2">
+                        <AppLogoDropdown />
+                    </div>
 
                     {/* Desktop Navigation */}
                     <div className="ml-6 hidden h-full items-center space-x-6 lg:flex">
                         <NavigationMenu className="flex h-full items-stretch">
                             <NavigationMenuList className="flex h-full items-stretch space-x-2">
-                                {mainNavItems.map((item, index) => (
+                                {filteredMainNavItems.map((item, index) => (
                                     <NavigationMenuItem key={index} className="relative flex h-full items-center">
                                         <Link
                                             href={item.href}
@@ -135,7 +177,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                                 <Search className="!size-5 opacity-80 group-hover:opacity-100" />
                             </Button>
                             <div className="hidden lg:flex">
-                                {rightNavItems.map((item) => (
+                                {filteredFooterNavItems && filteredFooterNavItems.map((item) => (
                                     <TooltipProvider key={item.title} delayDuration={0}>
                                         <Tooltip>
                                             <TooltipTrigger>

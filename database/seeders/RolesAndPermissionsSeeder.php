@@ -14,32 +14,45 @@ class RolesAndPermissionsSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // create permissions
-        Permission::create(['name' => 'view map']);
-        Permission::create(['name' => 'view validated data']);
-        Permission::create(['name' => 'view unvalidated data']);
+        Permission::create(['name' => 'view tree map']);
+        Permission::create(['name' => 'view validated tree']);
+        Permission::create(['name' => 'view unvalidated tree']);
         Permission::create(['name' => 'add tree']);
         Permission::create(['name' => 'edit tree']);
         Permission::create(['name' => 'edit own unvalidated tree']);
         Permission::create(['name' => 'validate tree']);
         Permission::create(['name' => 'delete tree']);
         Permission::create(['name' => 'delete own unvalidated tree']);
+        Permission::create(['name' => 'view validated measurement']);
+        Permission::create(['name' => 'view unvalidated measurement']);
         Permission::create(['name' => 'add measurement']);
         Permission::create(['name' => 'edit measurement']);
         Permission::create(['name' => 'edit own unvalidated measurement']);
         Permission::create(['name' => 'validate measurement']);
         Permission::create(['name' => 'delete measurement']);
         Permission::create(['name' => 'delete own unvalidated measurement']);
+        Permission::create(['name' => 'access user panel']);
         Permission::create(['name' => 'access admin panel']);
         Permission::create(['name' => 'access expert panel']);
+        Permission::create(['name' => 'view users']);
         Permission::create(['name' => 'add user']);
         Permission::create(['name' => 'edit user']);
         Permission::create(['name' => 'delete user']);
+        Permission::create(['name' => 'view trust levels']);
         Permission::create(['name' => 'add trust level']);
         Permission::create(['name' => 'edit trust level']);
         Permission::create(['name' => 'delete trust level']);
         Permission::create(['name' => 'add tree species']);
         Permission::create(['name' => 'edit tree species']);
         Permission::create(['name' => 'delete tree species']);
+        Permission::create(['name' => 'view permissions']);
+        Permission::create(['name' => 'add permission']);
+        Permission::create(['name' => 'edit permission']);
+        Permission::create(['name' => 'delete permission']);
+        Permission::create(['name' => 'view roles']);
+        Permission::create(['name' => 'add role']);
+        Permission::create(['name' => 'edit role']);
+        Permission::create(['name' => 'delete role']);
 
         // update cache to know about the newly created permissions (required if using WithoutModelEvents in seeders)
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
@@ -48,19 +61,19 @@ class RolesAndPermissionsSeeder extends Seeder
         // create roles and assign created permissions
 
         $role = Role::create(['name' => 'Guest']);
-        $role->givePermissionTo('view map', 'view validated data');
+        $role->givePermissionTo('view tree map', 'view validated tree', 'view validated measurement');
 
         // this can be done as separate statements
         $role = Role::create(['name' => 'User']);
-        $role->givePermissionTo('view map', 'view validated data', 'view unvalidated data', 'add tree',
-            'edit own unvalidated tree', 'delete own unvalidated tree', 'add measurement', 'edit own unvalidated measurement',
-            'delete own unvalidated measurement');
+        $role->givePermissionTo('view tree map', 'view validated tree', 'view unvalidated tree', 'add tree',
+            'edit own unvalidated tree', 'delete own unvalidated tree', 'view validated measurement', 'view unvalidated measurement', 'add measurement', 'edit own unvalidated measurement',
+            'delete own unvalidated measurement', 'access user panel');
 
         // or may be done by chaining
         $role = Role::create(['name' => 'Expert']);
-        $role->givePermissionTo('view map', 'view validated data', 'view unvalidated data', 'add tree',
-            'edit tree', 'validate tree', 'delete tree', 'add measurement', 'edit measurement', 'validate measurement',
-            'delete measurement', 'access expert panel', 'add tree species', 'edit tree species', 'delete tree species');
+        $role->givePermissionTo('view tree map', 'view validated tree', 'view unvalidated tree', 'add tree',
+            'edit tree', 'validate tree', 'delete tree', 'view validated measurement', 'view unvalidated measurement', 'add measurement', 'edit measurement', 'validate measurement',
+            'delete measurement', 'access user panel', 'access expert panel', 'add tree species', 'edit tree species', 'delete tree species');
 
         $role = Role::create(['name' => 'Admin']);
         $role->givePermissionTo(Permission::all());
