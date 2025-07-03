@@ -24,6 +24,8 @@ export interface Paginator<T> {
 
 export interface Auth {
     user: User;
+    roles: string[];
+    permissions: string[];
 }
 
 export interface BreadcrumbItem {

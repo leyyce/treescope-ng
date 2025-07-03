@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- *
+ * 
  *
  * @property string $id
  * @property string $tree_id
@@ -36,6 +36,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TreeMeasurement whereTrunkDiameter($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TreeMeasurement whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TreeMeasurement whereUserId($value)
+ * @property-read \App\Models\User $user
  * @mixin \Eloquent
  */
 class TreeMeasurement extends Model

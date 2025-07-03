@@ -15,15 +15,19 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'username' => 'TestUser',
-            'first_name' => 'Test',
-            'last_name' => 'User',
+            'username' => 'TreeScope',
+            'first_name' => 'Tree',
+            'last_name' => 'Scope',
             'password' => Hash::make('a.b.123456'),
             'step_length' => 80,
-            'email' => 'test.user@example.com',
+            'email' => 'admin@treescope.de',
             'email_verified_at' => now(),
-        ]);
-        User::factory(25)->create();
-        User::factory(10)->unverified()->create();
+        ])->assignRole('Super Admin');
+        User::factory(25)->create()->each(function ($user) {
+            $user->assignRole('User');
+        });
+        User::factory(10)->unverified()->create()->each(function ($user) {
+            $user->assignRole('User');
+        });
     }
 }

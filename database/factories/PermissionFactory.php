@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\Role;
+use App\Models\Permission;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
-class RoleFactory extends Factory
+class PermissionFactory extends Factory
 {
     public function definition(): array
     {

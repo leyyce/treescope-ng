@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Facades\Storage;
 
 /**
- *
+ * 
  *
  * @property string $id
  * @property string $measurement_id
@@ -37,6 +37,7 @@ use Illuminate\Support\Facades\Storage;
  * @property-read \App\Models\TreeMeasurement|null $treeMeasurement
  * @property string $tree_measurement_id
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TreePhoto whereTreeMeasurementId($value)
+ * @property-read mixed $url
  * @mixin \Eloquent
  */
 class TreePhoto extends Model
