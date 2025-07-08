@@ -1,4 +1,4 @@
-import MapPicker from '@/components/map-picker';
+import TreeMap from '@/components/tree-map';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -12,7 +12,7 @@ interface TreemapProps {
     trees: Tree[];
 }
 
-export default function TreeMap({ trees }: TreemapProps) {
+export default function MapView({ trees }: TreemapProps) {
     const [location, setLocation] = useState<
         | {
               lat: number;
@@ -50,7 +50,7 @@ export default function TreeMap({ trees }: TreemapProps) {
                             <Label htmlFor="location" className="flex-shrink-0">
                                 Location
                             </Label>
-                            <MapPicker value={location} onChange={handleLocationChange} trees={trees} className="mt-1 min-h-0 flex-1" />
+                            <TreeMap value={location} onChange={handleLocationChange} trees={trees} className="mt-1 min-h-0 flex-1" />
                             <div className="mt-4 flex justify-end">
                                 <TooltipProvider>
                                     <Tooltip>

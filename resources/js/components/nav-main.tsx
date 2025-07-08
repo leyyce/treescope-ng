@@ -5,37 +5,14 @@ import { usePermissions } from '@/hooks/use-permissions';
 
 export function NavMain({ items = [] }: { items: NavItem[] }) {
     const page = usePage();
-    const { hasPermission, hasRole } = usePermissions();
+    const { hasPermissions, hasRoles } = usePermissions();
 
     // Filter items based on permissions and roles
     const filteredItems = items.filter(item => {
-        // If the item doesn't have any permission or role requirements, it's accessible to everyone
-        if (!item.requiredPermissions && !item.requiredRoles) {
-            return true;
-        }
+        const accessibleByPermission = hasPermissions(item.requiredPermissions);
+        const accessibleByRole = hasRoles(item.requiredRoles);
 
-        // Check if the user has any of the required permissions
-        if (item.requiredPermissions && item.requiredPermissions.length > 0) {
-            const hasRequiredPermission = item.requiredPermissions.some(permission =>
-                hasPermission(permission)
-            );
-            if (hasRequiredPermission) {
-                return true;
-            }
-        }
-
-        // Check if the user has any of the required roles
-        if (item.requiredRoles && item.requiredRoles.length > 0) {
-            const hasRequiredRole = item.requiredRoles.some(role =>
-                hasRole(role)
-            );
-            if (hasRequiredRole) {
-                return true;
-            }
-        }
-
-        // If the item has requirements but the user doesn't meet any of them, it's not accessible
-        return false;
+        return accessibleByPermission && accessibleByRole;
     });
 
     return (

@@ -15,10 +15,6 @@ import { Link } from '@inertiajs/react';
 import treeMarker from '../../img/tree_marker.svg';
 import MapResizer from '@/components/map-resizer';
 
-// Make sure to add these to your CSS or import them in your main layout
-// import 'leaflet/dist/leaflet.css';
-
-// Define the props interface for the component
 interface MapPickerProps {
     value?: { lat: number; lng: number };
     onChange?: (location: { lat: number; lng: number; accuracy: number | null }) => void;
@@ -56,7 +52,7 @@ function MapEvents({ onLocationSelect }: { onLocationSelect: (latlng: LatLng) =>
     return null;
 }
 
-export default function MapPicker({ value, onChange, className = '', trees = [] }: MapPickerProps) {
+export default function TreeMap({ value, onChange, className = '', trees = [] }: MapPickerProps) {
     // Check if we're on a mobile device
     const isMobile = useIsMobile();
 

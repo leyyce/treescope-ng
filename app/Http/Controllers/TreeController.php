@@ -8,7 +8,6 @@ use App\Http\Requests\UpdateTreeRequest;
 use App\Models\TreeCondition;
 use App\Models\TreeLocationConfidence;
 use App\Models\TreeSpecies;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class TreeController extends Controller

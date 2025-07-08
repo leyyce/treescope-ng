@@ -1,38 +1,39 @@
 import { usePage } from '@inertiajs/react';
 import { Auth } from '@/types';
+import { checkPermissions, checkRoles } from '@/lib/permissions';
 
-type UsePermissionsReturn = {
-    /**
-     * Checks if the user has a given permission.
-     * @param name - Name of the permission (e.g. 'create tree').
-     * @returns `true`, if user has the permission, `false` otherwise.
-     */
-    hasPermission: (name: string) => boolean;
-
-    /**
-     * Checks if the user has a given role.
-     * @param name - Name of the role (e.g. 'Admin').
-     * @returns `true`, if user has the role, `false` otherwise.
-     */
-    hasRole: (name: string) => boolean;
-
-    /** Array with all permissions of the user */
-    permissions: string[];
-
-    /** Array with all roles of the user */
-    roles: string[];
-};
-
-export function usePermissions(): UsePermissionsReturn {
+/**
+ * A hook to check user permissions and roles.
+ * Provides functions that can evaluate either a string expression or an array.
+ */
+export const usePermissions = () => {
     const { permissions, roles } = usePage().props.auth as Auth;
 
-    const hasPermission = (name: string): boolean => {
-        return permissions.includes(name);
+    /**
+     * Checks if the user's permissions satisfy the requirements.
+     * @param requiredPermissions A logical expression string or an array of permissions (defaults to AND).
+     */
+    const hasPermissions = (requiredPermissions?: string | string[]): boolean => {
+        return checkPermissions(requiredPermissions, permissions);
     };
 
-    const hasRole = (name: string): boolean => {
-        return roles.includes(name);
+    /**
+     * Checks if the user's roles satisfy the requirements.
+     * @param requiredRoles A logical expression string or an array of roles (defaults to AND).
+     */
+    const hasRoles = (requiredRoles?: string | string[]): boolean => {
+        return checkRoles(requiredRoles, roles);
     };
 
-    return { hasPermission, hasRole, permissions, roles };
-}
+    /**
+     * Checks if the user satisfies both permission and role requirements.
+     */
+    const hasAll = (
+        requiredPermissions?: string | string[],
+        requiredRoles?: string | string[]
+    ): boolean => {
+        return hasPermissions(requiredPermissions) && hasRoles(requiredRoles);
+    };
+
+    return { hasPermissions, hasRoles, hasAll, permissions, roles};
+};

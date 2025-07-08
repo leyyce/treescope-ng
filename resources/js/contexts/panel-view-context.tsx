@@ -3,6 +3,7 @@ import { NavItem } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid, Shield, Trees, Users, ScrollText } from 'lucide-react';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
+import { checkPermissions, checkRoles } from '@/lib/permissions';
 
 // Define the available panel views
 export type PanelViewType = 'user' | 'admin';
@@ -16,9 +17,9 @@ export interface PanelView {
     // Optional URL patterns that this view can handle
     urlPatterns?: string[];
     // Optional permissions required to access this view
-    requiredPermissions?: string[];
+    requiredPermissions?: string | string[];
     // Optional roles required to access this view
-    requiredRoles?: string[];
+    requiredRoles?: string | string[];
 }
 
 // Define the panel views
@@ -31,12 +32,13 @@ export const panelViews: PanelView[] = [
                 title: 'Dashboard',
                 href: '/dashboard',
                 icon: LayoutGrid,
+                requiredPermissions: 'view user dashboard',
             },
             {
                 title: 'Tree Map',
                 href: '/tree-map',
                 icon: Trees,
-                requiredPermissions: ['view tree map'],
+                requiredPermissions: 'view tree map',
             },
         ],
         footerNavItems: [
@@ -51,7 +53,7 @@ export const panelViews: PanelView[] = [
                 icon: BookOpen,
             },
         ],
-        requiredPermissions: ['access user panel'],
+        requiredPermissions: 'access user panel',
     },
     {
         id: 'admin',
@@ -61,24 +63,25 @@ export const panelViews: PanelView[] = [
                 title: 'Admin Dashboard',
                 href: '/admin/dashboard',
                 icon: LayoutGrid,
+                requiredPermissions: 'view admin dashboard',
             },
             {
                 title: 'User Management',
                 href: '/admin/users',
                 icon: Users,
-                requiredPermissions: ['view users'],
+                requiredPermissions: 'view users',
             },
             {
                 title: 'Role Management',
                 href: '/admin/roles',
                 icon: Shield,
-                requiredPermissions: ['view roles'],
+                requiredPermissions: 'view roles',
             },
             {
                 title: 'Permission Management',
                 href: '/admin/permissions',
                 icon: ScrollText,
-                requiredPermissions: ['view permissions'],
+                requiredPermissions: 'view permissions',
             }
         ],
         footerNavItems: [
@@ -94,7 +97,7 @@ export const panelViews: PanelView[] = [
             },
         ],
         urlPatterns: ['/admin/*'],
-        requiredPermissions: ['access admin panel'],
+        requiredPermissions: 'access admin panel',
     },
 ];
 
@@ -124,31 +127,21 @@ class ViewRegistry {
 
     // Get all views that the user has permission to access
     getAccessibleViews(userPermissions: string[], userRoles: string[]): PanelView[] {
-        return Array.from(this.views.values()).filter((view) => {
-            // If the view doesn't have any permission or role requirements, it's accessible to everyone
-            if (!view.requiredPermissions && !view.requiredRoles) {
-                return true;
-            }
+        return Array.from(this.views.values()).filter((view: PanelView) => {
+            const accessibleByPermission = checkPermissions(
+                view.requiredPermissions,
+                userPermissions
+            );
 
-            // Check if the user has any of the required permissions
-            if (view.requiredPermissions && view.requiredPermissions.length > 0) {
-                const hasRequiredPermission = view.requiredPermissions.some((permission) => userPermissions.includes(permission));
-                if (hasRequiredPermission) {
-                    return true;
-                }
-            }
+            const accessibleByRole = checkRoles(
+                view.requiredRoles,
+                userRoles
+            );
 
-            // Check if the user has any of the required roles
-            if (view.requiredRoles && view.requiredRoles.length > 0) {
-                const hasRequiredRole = view.requiredRoles.some((role) => userRoles.includes(role));
-                if (hasRequiredRole) {
-                    return true;
-                }
-            }
-
-            // If the view has requirements but the user doesn't meet any of them, it's not accessible
-            return false;
+            // The view is accessible only if both permission and role checks pass.
+            return accessibleByPermission && accessibleByRole;
         });
+
     }
 
     findViewForUrl(url: string): PanelView | undefined {

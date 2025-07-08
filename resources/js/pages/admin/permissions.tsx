@@ -45,7 +45,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Permissions({ permissions }: PermissionsPageProps) {
-    const { hasPermission } = usePermissions();
+    const { hasPermissions } = usePermissions();
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
     const [editingPermission, setEditingPermission] = useState<Permission | null>(null);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -126,7 +126,7 @@ export default function Permissions({ permissions }: PermissionsPageProps) {
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold">Permission Management</h1>
-                    {hasPermission('add permission') && (
+                    {hasPermissions('create permission') && (
                         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
                             <DialogTrigger asChild>
                                 <Button className="flex items-center gap-1">
@@ -188,13 +188,13 @@ export default function Permissions({ permissions }: PermissionsPageProps) {
                                         <TableCell>{permission.name}</TableCell>
                                         <TableCell>
                                             <div className="flex space-x-2">
-                                                {hasPermission('edit permission') && (
+                                                {hasPermissions('edit permission') && (
                                                     <Button variant="outline" size="sm" onClick={() => openEditDialog(permission)}>
                                                         <Pencil className="h-4 w-4" />
                                                         <span className="sr-only">Edit</span>
                                                     </Button>
                                                 )}
-                                                {hasPermission('delete permission') && (
+                                                {hasPermissions('delete permission') && (
                                                     <Button variant="outline" size="sm" onClick={() => openDeleteDialog(permission)}>
                                                         <Trash2 className="h-4 w-4" />
                                                         <span className="sr-only">Delete</span>

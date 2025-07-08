@@ -1,8 +1,10 @@
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
+import { usePermissions } from '@/hooks/use-permissions';
 
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
+    const {hasPermissions} = usePermissions();
 
     return (
         <>
@@ -14,12 +16,32 @@ export default function Welcome() {
                 <header className="mb-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl">
                     <nav className="flex items-center justify-end gap-4">
                         {auth.user ? (
-                            <Link
-                                href={route('dashboard')}
-                                className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
-                            >
-                                Dashboard
-                            </Link>
+                            <>
+                                {hasPermissions(['access user panel & view user dashboard']) && (
+                                    <Link
+                                        href={route('user.dashboard')}
+                                        className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                    >
+                                        Dashboard
+                                    </Link>
+                                )}
+                                {hasPermissions(['access expert panel & view expert dashboard']) && (
+                                    <Link
+                                        href={route('user.dashboard')}
+                                        className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                    >
+                                        Expert Dashboard
+                                    </Link>
+                                )}
+                                {hasPermissions(['access admin panel & view admin dashboard']) && (
+                                    <Link
+                                        href={route('admin.dashboard')}
+                                        className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                    >
+                                        Admin Dashboard
+                                    </Link>
+                                )}
+                            </>
                         ) : (
                             <>
                                 <Link

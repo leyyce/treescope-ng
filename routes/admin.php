@@ -9,7 +9,7 @@ use Inertia\Inertia;
 Route::middleware(['auth', 'verified', 'permission:access admin panel'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('admin/dashboard');
-    })->name('dashboard');
+    })->name('dashboard')->middleware(['permission:view admin dashboard']);
 
     // User routes
     Route::get('/users', [UserController::class, 'index'])->name('users')->middleware(['permission:view users']);
@@ -26,6 +26,6 @@ Route::middleware(['auth', 'verified', 'permission:access admin panel'])->prefix
     // Permission routes
     Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions')->middleware(['permission:view permissions']);
     Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store')->middleware(['permission:create permissions']);
-    Route::put('/permissions/{permission}', [PermissionController::class, 'update'])->name('permissions.update');
-    Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
+    Route::put('/permissions/{permission}', [PermissionController::class, 'update'])->name('permissions.update')->middleware(['permission:edit permissions']);
+    Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy'])->name('permissions.destroy')->middleware(['permission:delete permissions']);
 });

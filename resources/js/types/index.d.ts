@@ -44,9 +44,9 @@ export interface NavItem {
     icon?: LucideIcon | null;
     isActive?: boolean;
     // Optional permissions required to access this item
-    requiredPermissions?: string[];
+    requiredPermissions?: string | string[];
     // Optional roles required to access this item
-    requiredRoles?: string[];
+    requiredRoles?: string | string[];
 }
 
 export interface SharedData {

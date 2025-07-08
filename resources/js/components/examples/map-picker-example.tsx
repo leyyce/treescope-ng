@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import MapPicker from '@/components/map-picker';
+import TreeMap from '@/components/tree-map';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 
@@ -22,7 +22,7 @@ export default function MapPickerExample() {
       <CardContent className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="location">Location</Label>
-          <MapPicker
+          <TreeMap
             value={location}
             onChange={handleLocationChange}
             className="mt-1"

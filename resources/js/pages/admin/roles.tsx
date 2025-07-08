@@ -54,7 +54,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Roles({ roles, permissions }: RolesPageProps) {
-    const { hasPermission } = usePermissions();
+    const { hasPermissions } = usePermissions();
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
     const [editingRole, setEditingRole] = useState<Role | null>(null);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -163,7 +163,7 @@ export default function Roles({ roles, permissions }: RolesPageProps) {
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold">Role Management</h1>
-                    {hasPermission('add role') && (
+                    {hasPermissions('create role') && (
                         <Dialog
                             open={isCreateDialogOpen}
                             onOpenChange={(open) => {
@@ -266,13 +266,13 @@ export default function Roles({ roles, permissions }: RolesPageProps) {
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex space-x-2">
-                                                {hasPermission('edit role') && (
+                                                {hasPermissions('edit role') && (
                                                     <Button variant="outline" size="sm" onClick={() => openEditDialog(role)}>
                                                         <Pencil className="h-4 w-4" />
                                                         <span className="sr-only">Edit</span>
                                                     </Button>
                                                 )}
-                                                {hasPermission('delete role') && (
+                                                {hasPermissions('delete role') && (
                                                     <Button variant="outline" size="sm" onClick={() => openDeleteDialog(role)}>
                                                         <Trash2 className="h-4 w-4" />
                                                         <span className="sr-only">Delete</span>

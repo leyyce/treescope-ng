@@ -76,7 +76,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Users({ users, roles, filters }: UsersPageProps) {
-  const { hasPermission } = usePermissions();
+  const { hasPermissions } = usePermissions();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -224,7 +224,7 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
                 <Search className="h-4 w-4" />
               </Button>
             </form>
-            {hasPermission('add user') && (
+            {hasPermissions('create user') && (
               <Dialog
                 open={isCreateDialogOpen}
                 onOpenChange={(open) => {
@@ -417,7 +417,7 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
                     </TableCell>
                     <TableCell>
                       <div className="flex space-x-2">
-                        {hasPermission('edit user') && (
+                        {hasPermissions('edit user') && (
                           <Button
                             variant="outline"
                             size="sm"
@@ -427,7 +427,7 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
                             <span className="sr-only">Edit</span>
                           </Button>
                         )}
-                        {hasPermission('delete user') && (
+                        {hasPermissions('delete user') && (
                           <Button
                             variant="outline"
                             size="sm"
