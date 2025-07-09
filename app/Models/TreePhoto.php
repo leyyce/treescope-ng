@@ -14,14 +14,15 @@ use Illuminate\Support\Facades\Storage;
  * 
  *
  * @property string $id
- * @property string $measurement_id
+ * @property string $tree_measurement_id
  * @property string $user_id
  * @property string $path
  * @property string|null $note
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\TreeMeasurement $measurement
  * @property-read \App\Models\Tree|null $tree
+ * @property-read \App\Models\TreeMeasurement $treeMeasurement
+ * @property-read mixed $url
  * @property-read \App\Models\User $user
  * @method static \Database\Factories\TreePhotoFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TreePhoto newModelQuery()
@@ -29,15 +30,11 @@ use Illuminate\Support\Facades\Storage;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TreePhoto query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TreePhoto whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TreePhoto whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|TreePhoto whereMeasurementId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TreePhoto whereNote($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TreePhoto wherePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|TreePhoto whereTreeMeasurementId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TreePhoto whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TreePhoto whereUserId($value)
- * @property-read \App\Models\TreeMeasurement|null $treeMeasurement
- * @property string $tree_measurement_id
- * @method static \Illuminate\Database\Eloquent\Builder<static>|TreePhoto whereTreeMeasurementId($value)
- * @property-read mixed $url
  * @mixin \Eloquent
  */
 class TreePhoto extends Model

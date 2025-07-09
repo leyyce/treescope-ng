@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \App\Models\Tree $tree
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TreePhoto> $treePhotos
  * @property-read int|null $tree_photos_count
+ * @property-read \App\Models\User $user
  * @method static \Database\Factories\TreeMeasurementFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TreeMeasurement newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TreeMeasurement newQuery()
@@ -36,7 +37,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TreeMeasurement whereTrunkDiameter($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TreeMeasurement whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TreeMeasurement whereUserId($value)
- * @property-read \App\Models\User $user
  * @mixin \Eloquent
  */
 class TreeMeasurement extends Model
