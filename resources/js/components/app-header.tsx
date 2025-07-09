@@ -30,69 +30,24 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const { auth } = page.props;
     const getInitials = useInitials();
     const { currentView } = usePanelView();
-    const { hasPermission, hasRole } = usePermissions();
+    const { hasPermissions, hasRoles, hasMixed } = usePermissions();
 
     // Filter mainNavItems based on permissions and roles
     const filteredMainNavItems = currentView.mainNavItems.filter(item => {
-        // If the item doesn't have any permission or role requirements, it's accessible to everyone
-        if (!item.requiredPermissions && !item.requiredRoles) {
-            return true;
-        }
-
-        // Check if the user has any of the required permissions
-        if (item.requiredPermissions && item.requiredPermissions.length > 0) {
-            const hasRequiredPermission = item.requiredPermissions.some(permission =>
-                hasPermission(permission)
-            );
-            if (hasRequiredPermission) {
-                return true;
-            }
-        }
-
-        // Check if the user has any of the required roles
-        if (item.requiredRoles && item.requiredRoles.length > 0) {
-            const hasRequiredRole = item.requiredRoles.some(role =>
-                hasRole(role)
-            );
-            if (hasRequiredRole) {
-                return true;
-            }
-        }
-
-        // If the item has requirements but the user doesn't meet any of them, it's not accessible
-        return false;
+        const accessibleByPermission = hasPermissions(item.requiredPermissions);
+        const accessibleByRole = hasRoles(item.requiredRoles);
+        const accessibleByMix = hasMixed(item.requiredMixed);
+        return accessibleByPermission && accessibleByRole && accessibleByMix;
     });
 
     // Filter footerNavItems based on permissions and roles
-    const filteredFooterNavItems = currentView.footerNavItems ? currentView.footerNavItems.filter(item => {
-        // If the item doesn't have any permission or role requirements, it's accessible to everyone
-        if (!item.requiredPermissions && !item.requiredRoles) {
-            return true;
-        }
+    const filteredFooterNavItems = currentView.footerNavItems?.filter(item => {
+        const accessibleByPermission = hasPermissions(item.requiredPermissions);
+        const accessibleByRole = hasRoles(item.requiredRoles);
+        const accessibleByMix = hasMixed(item.requiredMixed);
+        return accessibleByPermission && accessibleByRole && accessibleByMix;
+    }) ?? [];
 
-        // Check if the user has any of the required permissions
-        if (item.requiredPermissions && item.requiredPermissions.length > 0) {
-            const hasRequiredPermission = item.requiredPermissions.some(permission =>
-                hasPermission(permission)
-            );
-            if (hasRequiredPermission) {
-                return true;
-            }
-        }
-
-        // Check if the user has any of the required roles
-        if (item.requiredRoles && item.requiredRoles.length > 0) {
-            const hasRequiredRole = item.requiredRoles.some(role =>
-                hasRole(role)
-            );
-            if (hasRequiredRole) {
-                return true;
-            }
-        }
-
-        // If the item has requirements but the user doesn't meet any of them, it's not accessible
-        return false;
-    }) : undefined;
     return (
         <>
             <div className="border-b border-sidebar-border/80">
