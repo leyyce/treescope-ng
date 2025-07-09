@@ -34,7 +34,6 @@ function MeasurementCard({ measurement }: MeasurementCardProps) {
     useEffect(() => {
         // Filter out measurements without photos
         if (measurement.tree_photos && measurement.tree_photos.length > 0) {
-            console.log('Measurement photos:', measurement.tree_photos);
             setPhotos(measurement.tree_photos);
         }
     }, [measurement]);

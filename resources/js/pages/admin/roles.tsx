@@ -16,26 +16,13 @@ import { Toaster } from '@/components/ui/sonner';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
-import { Paginator, type BreadcrumbItem } from '@/types';
+import { Paginator, type BreadcrumbItem, Role, Permission } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
-
-interface Permission {
-    id: string;
-    name: string;
-}
-
-interface Role {
-    id: string;
-    name: string;
-    created_at: string;
-    updated_at: string;
-    permissions: Permission[];
-}
 
 interface RolesPageProps {
     roles: Paginator<Role>;
@@ -127,7 +114,7 @@ export default function Roles({ roles, permissions }: RolesPageProps) {
         setEditingRole(role);
         editForm.setData({
             name: role.name,
-            permissions: role.permissions.map(permission => permission.name),
+            permissions: role.permissions?.map(permission => permission.name) ?? [],
         });
         setIsEditDialogOpen(true);
     };
@@ -257,7 +244,7 @@ export default function Roles({ roles, permissions }: RolesPageProps) {
                                         <TableCell>{role.name}</TableCell>
                                         <TableCell>
                                             <div className="flex flex-wrap gap-1">
-                                                {role.permissions.map((permission) => (
+                                                {role.permissions?.map((permission) => (
                                                     <Badge key={permission.id} variant="outline">
                                                         {permission.name}
                                                     </Badge>

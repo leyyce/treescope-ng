@@ -16,18 +16,11 @@ import { Toaster } from '@/components/ui/sonner';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
-import { Paginator, type BreadcrumbItem } from '@/types';
+import { Paginator, type BreadcrumbItem, Permission } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
-
-interface Permission {
-    id: string;
-    name: string;
-    created_at: string;
-    updated_at: string;
-}
 
 interface PermissionsPageProps {
     permissions: Paginator<Permission>;

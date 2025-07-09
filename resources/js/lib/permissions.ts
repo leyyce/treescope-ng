@@ -110,8 +110,6 @@ export const checkMixed = (requiredMixed?: string | string[], userPermissions: s
 
     const prefixedMixed = prefixedUserPermissions.concat(prefixedUserRoles);
 
-    console.log(prefixedMixed);
-
     const expression = Array.isArray(requiredMixed)
         ? requiredMixed.join(' & ')
         : requiredMixed;

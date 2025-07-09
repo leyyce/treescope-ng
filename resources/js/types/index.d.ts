@@ -61,6 +61,26 @@ export interface SharedData {
     [key: string]: unknown;
 }
 
+interface Permission {
+    id: string;
+    name: string;
+    created_at: string;
+    updated_at: string;
+
+    [key: string]: unknown;
+}
+
+interface Role {
+    id: string;
+    name: string;
+    created_at: string;
+    updated_at: string;
+
+    permissions?: Permission[];
+
+    [key: string]: unknown;
+}
+
 export interface User {
     id: number;
     username: string;
@@ -68,10 +88,12 @@ export interface User {
     last_name: string;
     step_length: number;
     email: string;
-    avatar?: string;
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
+
+    avatar?: string;
+    roles?: Role[];
 
     [key: string]: unknown;
 }
@@ -87,11 +109,14 @@ export interface Tree {
     };
     created_at: string;
     updated_at: string;
+
     user?: User;
     tree_species?: TreeSpecies;
     tree_condition?: TreeCondition;
     tree_measurements?: TreeMeasurement[];
     tree_photos?: TreePhoto[];
+
+    [key: string]: unknown;
 }
 
 export interface TreeSpecies {
@@ -119,11 +144,12 @@ export interface TreeMeasurement {
     inclination: number;
     trunk_diameter: number;
     note: string | null;
-    tree: Tree;
-    user: User;
     created_at: string;
     updated_at: string;
-    tree_photos: TreePhoto[];
+
+    tree?: Tree;
+    user?: User;
+    tree_photos?: TreePhoto[];
 
     [key: string]: unknown;
 }

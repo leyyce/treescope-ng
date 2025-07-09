@@ -4,7 +4,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { InertiaPaginator } from '@/components/inertia_paginator';
-import { Paginator, type BreadcrumbItem } from '@/types';
+import { Paginator, User, BreadcrumbItem, Role } from '@/types';
 import { usePermissions } from '@/hooks/use-permissions';
 import {
   Dialog,
@@ -38,23 +38,6 @@ import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
-
-interface Role {
-  id: string;
-  name: string;
-}
-
-interface User {
-  id: string;
-  username: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  step_length: number;
-  created_at: string;
-  updated_at: string;
-  roles: Role[];
-}
 
 interface UsersPageProps {
   users: Paginator<User>;
@@ -168,7 +151,7 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
       password: '',
       password_confirmation: '',
       step_length: user.step_length,
-      roles: user.roles.map(role => role.name),
+      roles: user.roles?.map(role => role.name) ?? [],
     });
     setIsEditDialogOpen(true);
   };
@@ -389,6 +372,7 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
                 <TableHead>Username</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Email</TableHead>
+                <TableHead>Email Verified</TableHead>
                 <TableHead>Roles</TableHead>
                 <TableHead className="w-[150px]">Actions</TableHead>
               </TableRow>
@@ -396,7 +380,7 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
             <TableBody>
               {users.data.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8">
+                  <TableCell colSpan={6} className="text-center py-8">
                     No users found
                   </TableCell>
                 </TableRow>
@@ -407,8 +391,13 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
                     <TableCell>{`${user.first_name} ${user.last_name}`}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>
+                      <Badge variant={user.email_verified_at ? "default" : "secondary"}>
+                        {user.email_verified_at ? "Verified" : "Not Verified"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
                       <div className="flex flex-wrap gap-1">
-                        {user.roles.map((role) => (
+                        {user.roles?.map((role) => (
                           <Badge key={role.id} variant="outline">
                             {role.name}
                           </Badge>
