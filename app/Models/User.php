@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasRolesWithTimestampUpdate;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Clickbar\Magellan\Data\Geometries\Point;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -10,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
 
 /**
  * 
@@ -69,7 +69,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, HasRoles, HasUuids, Notifiable;
+    use HasFactory, HasRolesWithTimestampUpdate, HasUuids, Notifiable;
 
     /**
      * The attributes that are mass assignable.

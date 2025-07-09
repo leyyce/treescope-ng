@@ -36,6 +36,6 @@ use Spatie\Permission\Models\Permission as SpatiePermission;
  */
 class Permission extends SpatiePermission
 {
-    use HasFactory;
-    use HasUuids;
+    /** @use HasFactory<\Database\Factories\PermissionFactory> */
+    use HasFactory, HasUuids;
 }
