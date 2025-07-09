@@ -165,13 +165,15 @@ export default function Permissions({ permissions }: PermissionsPageProps) {
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Name</TableHead>
+                                <TableHead>Created At</TableHead>
+                                <TableHead>Updated At</TableHead>
                                 <TableHead className="w-[200px]">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {permissions.data.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={2} className="py-8 text-center">
+                                    <TableCell colSpan={4} className="py-8 text-center">
                                         No permissions found
                                     </TableCell>
                                 </TableRow>
@@ -179,6 +181,8 @@ export default function Permissions({ permissions }: PermissionsPageProps) {
                                 permissions.data.map((permission) => (
                                     <TableRow key={permission.id}>
                                         <TableCell>{permission.name}</TableCell>
+                                        <TableCell>{new Date(permission.created_at).toLocaleString()}</TableCell>
+                                        <TableCell>{new Date(permission.updated_at).toLocaleString()}</TableCell>
                                         <TableCell>
                                             <div className="flex space-x-2">
                                                 {hasPermissions('edit permission') && (

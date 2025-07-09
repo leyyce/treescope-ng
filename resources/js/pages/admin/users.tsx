@@ -374,13 +374,15 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
                 <TableHead>Email</TableHead>
                 <TableHead>Email Verified</TableHead>
                 <TableHead>Roles</TableHead>
+                <TableHead>Registered At</TableHead>
+                <TableHead>Updated At</TableHead>
                 <TableHead className="w-[150px]">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {users.data.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8">
+                  <TableCell colSpan={8} className="text-center py-8">
                     No users found
                   </TableCell>
                 </TableRow>
@@ -404,6 +406,8 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
                         ))}
                       </div>
                     </TableCell>
+                    <TableCell>{new Date(user.created_at).toLocaleString()}</TableCell>
+                    <TableCell>{new Date(user.updated_at).toLocaleString()}</TableCell>
                     <TableCell>
                       <div className="flex space-x-2">
                         {hasPermissions('edit user') && (

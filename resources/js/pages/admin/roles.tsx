@@ -228,13 +228,15 @@ export default function Roles({ roles, permissions }: RolesPageProps) {
                             <TableRow>
                                 <TableHead>Name</TableHead>
                                 <TableHead>Permissions</TableHead>
+                                <TableHead>Created At</TableHead>
+                                <TableHead>Updated At</TableHead>
                                 <TableHead className="w-[200px]">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {roles.data.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={3} className="py-8 text-center">
+                                    <TableCell colSpan={5} className="py-8 text-center">
                                         No roles found
                                     </TableCell>
                                 </TableRow>
@@ -251,6 +253,8 @@ export default function Roles({ roles, permissions }: RolesPageProps) {
                                                 ))}
                                             </div>
                                         </TableCell>
+                                        <TableCell>{new Date(role.created_at).toLocaleString()}</TableCell>
+                                        <TableCell>{new Date(role.updated_at).toLocaleString()}</TableCell>
                                         <TableCell>
                                             <div className="flex space-x-2">
                                                 {hasPermissions('edit role') && (
