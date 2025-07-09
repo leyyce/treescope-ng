@@ -3,7 +3,7 @@ import { NavItem } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid, Shield, Trees, Users, ScrollText } from 'lucide-react';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { checkPermissions, checkRoles } from '@/lib/permissions';
+import { checkMixed, checkPermissions, checkRoles } from '@/lib/permissions';
 
 // Define the available panel views
 export type PanelViewType = 'user' | 'admin';
@@ -20,6 +20,8 @@ export interface PanelView {
     requiredPermissions?: string | string[];
     // Optional roles required to access this view
     requiredRoles?: string | string[];
+    // Optional mix of permissions and roles required to access this view
+    requiredMixed?: string | string[];
 }
 
 // Define the panel views
@@ -138,8 +140,14 @@ class ViewRegistry {
                 userRoles
             );
 
+            const accessibleByMixed = checkMixed(
+                view.requiredMixed,
+                userPermissions,
+                userRoles
+            )
+
             // The view is accessible only if both permission and role checks pass.
-            return accessibleByPermission && accessibleByRole;
+            return accessibleByPermission && accessibleByRole && accessibleByMixed;
         });
 
     }

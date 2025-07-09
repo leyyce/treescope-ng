@@ -8,7 +8,7 @@
  * - `()`: Grouping
  *
  * It replaces permission/role names in the string with `true` or `false`
- * based on whether the user has them, and then safely evaluates the
+ * based on whether the user has them and then safely evaluates the
  * resulting boolean expression.
  *
  * @param expression The logical expression string.
@@ -17,7 +17,7 @@
  */
 function evaluateExpression(expression: string, availableItems: string[]): boolean {
     // Find all unique permission/role names in the expression.
-    const requiredItems = [...new Set(expression.match(/[a-zA-Z0-9\s._-]+/g) || [])]
+    const requiredItems = [...new Set(expression.match(/[a-zA-Z0-9\s.:_-]+/g) || [])]
         .map(item => item.trim())
         .filter(item => item && !/^(true|false)$/i.test(item));
 
@@ -36,7 +36,6 @@ function evaluateExpression(expression: string, availableItems: string[]): boole
         .replace(/\|/g, '||');
 
     // Ensure the entire string consists only of allowed tokens.
-    // This is safer than the previous character-based check.
     const validationRegex = /^(true|false|&&|\|\||!|\(|\)|\s)+$/;
     if (!validationRegex.test(sanitizedExpression)) {
         console.error('Invalid characters or structure in permission expression:', sanitizedExpression);
@@ -54,7 +53,7 @@ function evaluateExpression(expression: string, availableItems: string[]): boole
 
 /**
  * Checks if a user's permissions satisfy a logical expression.
- * If an array is passed, it defaults to requiring all of them (old behavior).
+ * If an array is passed, it defaults to requiring all of them.
  *
  * @param requiredPermissions The logical expression string or an array of permissions.
  * @param userPermissions The permissions the user possesses.
@@ -74,7 +73,7 @@ export const checkPermissions = (requiredPermissions?: string | string[], userPe
 
 /**
  * Checks if a user's roles satisfy a logical expression.
- * If an array is passed, it defaults to requiring all of them (old behavior).
+ * If an array is passed, it defaults to requiring all of them.
  *
  * @param requiredRoles The logical expression string or an array of roles.
  * @param userRoles The roles the user possesses.
@@ -91,3 +90,31 @@ export const checkRoles = (requiredRoles?: string | string[], userRoles: string[
 
     return evaluateExpression(expression, userRoles);
 };
+
+/**
+ * Checks if a user's permissions and roles satisfy a logical expression.
+ * If an array is passed, it defaults to requiring all of them.
+ *
+ * @param requiredMixed The logical expression string or an array of permissions and roles. Permissions need to be prefixed with 'permission:' and roles with 'role:'
+ * @param userPermissions The permissions the user possesses.
+ * @param userRoles The roles the user possesses.
+ * @returns {boolean} True if the user meets the requirements.
+ */
+export const checkMixed = (requiredMixed?: string | string[], userPermissions: string[] = [], userRoles: string[] = []): boolean => {
+    if (!requiredMixed || (Array.isArray(requiredMixed) && requiredMixed.length === 0)) {
+        return true;
+    }
+
+    const prefixedUserPermissions = userPermissions.map(permission => `permission:${permission}`);
+    const prefixedUserRoles = userRoles.map(role => `role:${role}`);
+
+    const prefixedMixed = prefixedUserPermissions.concat(prefixedUserRoles);
+
+    console.log(prefixedMixed);
+
+    const expression = Array.isArray(requiredMixed)
+        ? requiredMixed.join(' & ')
+        : requiredMixed;
+
+    return evaluateExpression(expression, prefixedMixed);
+}

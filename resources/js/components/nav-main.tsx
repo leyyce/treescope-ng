@@ -5,14 +5,14 @@ import { usePermissions } from '@/hooks/use-permissions';
 
 export function NavMain({ items = [] }: { items: NavItem[] }) {
     const page = usePage();
-    const { hasPermissions, hasRoles } = usePermissions();
+    const { hasPermissions, hasRoles, hasMixed } = usePermissions();
 
     // Filter items based on permissions and roles
     const filteredItems = items.filter(item => {
         const accessibleByPermission = hasPermissions(item.requiredPermissions);
         const accessibleByRole = hasRoles(item.requiredRoles);
-
-        return accessibleByPermission && accessibleByRole;
+        const accessibleByMix = hasMixed(item.requiredMixed);
+        return accessibleByPermission && accessibleByRole && accessibleByMix;
     });
 
     return (

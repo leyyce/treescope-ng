@@ -2,6 +2,7 @@ import { Icon } from '@/components/icon';
 import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { type ComponentPropsWithoutRef } from 'react';
+import { usePermissions } from '@/hooks/use-permissions';
 
 export function NavFooter({
     items,
@@ -10,11 +11,21 @@ export function NavFooter({
 }: ComponentPropsWithoutRef<typeof SidebarGroup> & {
     items: NavItem[];
 }) {
+
+    const { hasPermissions, hasRoles, hasMixed } = usePermissions();
+    // Filter items based on permissions and roles
+    const filteredItems = items.filter(item => {
+        const accessibleByPermission = hasPermissions(item.requiredPermissions);
+        const accessibleByRole = hasRoles(item.requiredRoles);
+        const accessibleByMix = hasMixed(item.requiredMixed);
+        return accessibleByPermission && accessibleByRole && accessibleByMix;
+    });
+
     return (
         <SidebarGroup {...props} className={`group-data-[collapsible=icon]:p-0 ${className || ''}`}>
             <SidebarGroupContent>
                 <SidebarMenu>
-                    {items.map((item) => (
+                    {filteredItems.map((item) => (
                         <SidebarMenuItem key={item.title}>
                             <SidebarMenuButton
                                 asChild

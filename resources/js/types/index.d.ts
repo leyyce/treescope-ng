@@ -47,6 +47,8 @@ export interface NavItem {
     requiredPermissions?: string | string[];
     // Optional roles required to access this item
     requiredRoles?: string | string[];
+    // Optional mix of permissions and roles required to access this item
+    requiredMixed?: string | string[];
 }
 
 export interface SharedData {

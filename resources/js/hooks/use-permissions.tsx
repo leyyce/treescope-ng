@@ -1,6 +1,6 @@
 import { usePage } from '@inertiajs/react';
 import { Auth } from '@/types';
-import { checkPermissions, checkRoles } from '@/lib/permissions';
+import { checkPermissions, checkRoles, checkMixed } from '@/lib/permissions';
 
 /**
  * A hook to check user permissions and roles.
@@ -35,5 +35,11 @@ export const usePermissions = () => {
         return hasPermissions(requiredPermissions) && hasRoles(requiredRoles);
     };
 
-    return { hasPermissions, hasRoles, hasAll, permissions, roles};
+    const hasMixed = (
+        requiredMixed?: string | string[],
+    ): boolean => {
+        return checkMixed(requiredMixed, permissions, roles);
+    }
+
+    return { hasPermissions, hasRoles, hasAll, hasMixed, permissions, roles};
 };
