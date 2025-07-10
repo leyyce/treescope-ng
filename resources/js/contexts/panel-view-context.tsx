@@ -6,7 +6,7 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, 
 import { checkMixed, checkPermissions, checkRoles } from '@/lib/permissions';
 
 // Define the available panel views
-export type PanelViewType = 'user' | 'admin';
+export type PanelViewType = 'user' | 'expert' | 'admin';
 
 // Define the structure for each panel view
 export interface PanelView {
@@ -56,6 +56,26 @@ export const panelViews: PanelView[] = [
             },
         ],
         requiredPermissions: 'access user panel',
+    },
+    {
+        id: 'expert',
+        label: 'Expert Panel',
+        mainNavItems: [
+            {
+                title: 'Expert Dashboard',
+                href: '/expert/dashboard',
+                icon: LayoutGrid,
+                requiredPermissions: 'view expert dashboard',
+            },
+            {
+                title: 'Tree Species',
+                href: '/expert/tree-species',
+                icon: Trees,
+                requiredPermissions: 'view tree species',
+            },
+        ],
+        urlPatterns: ['/expert/*'],
+        requiredPermissions: 'access expert panel',
     },
     {
         id: 'admin',

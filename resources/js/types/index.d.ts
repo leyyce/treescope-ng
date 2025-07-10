@@ -122,8 +122,17 @@ export interface Tree {
 export interface TreeSpecies {
     id: string;
     name: string;
-    scientific_name: string;
+    scientific_name: string | null;
     description: string;
+    a: number | null;
+    b: number | null;
+    c: number | null;
+    d: number | null;
+    e: number | null;
+    f: number | null;
+    g: number | null;
+    created_at: string;
+    updated_at: string;
 
     [key: string]: unknown;
 }

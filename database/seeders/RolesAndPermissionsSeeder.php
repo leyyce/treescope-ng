@@ -45,6 +45,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'create trust level']);
         Permission::create(['name' => 'edit trust level']);
         Permission::create(['name' => 'delete trust level']);
+        Permission::create(['name' => 'view tree species']);
         Permission::create(['name' => 'create tree species']);
         Permission::create(['name' => 'edit tree species']);
         Permission::create(['name' => 'delete tree species']);
@@ -76,7 +77,9 @@ class RolesAndPermissionsSeeder extends Seeder
         $role = Role::create(['name' => 'Expert']);
         $role->givePermissionTo('view tree map', 'view validated tree', 'view unvalidated tree', 'create tree',
             'edit tree', 'validate tree', 'delete tree', 'view validated measurement', 'view unvalidated measurement', 'create measurement', 'edit measurement', 'validate measurement',
-            'delete measurement', 'access user panel', 'view user dashboard', 'access expert panel', 'view expert dashboard', 'create tree species', 'edit tree species', 'delete tree species');
+            'delete measurement', 'access user panel', 'view user dashboard', 'access expert panel', 'view expert dashboard',
+            'view tree species', 'create tree species', 'edit tree species', 'delete tree species'
+        );
 
         $role = Role::create(['name' => 'Admin']);
         $role->givePermissionTo('view tree map', 'view validated tree', 'view unvalidated tree', 'create tree',
