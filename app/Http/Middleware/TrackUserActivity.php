@@ -21,6 +21,7 @@ class TrackUserActivity
 
             // Update last activity timestamp
             $user->last_activity = now();
+            $user->timestamps = false;
             $user->save();
         }
 

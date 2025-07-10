@@ -17,7 +17,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import { Paginator, type BreadcrumbItem, Role, Permission } from '@/types';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
@@ -70,6 +70,7 @@ export default function Roles({ roles, permissions }: RolesPageProps) {
                 setShouldResetCreateForm(true);
                 setIsCreateDialogOpen(false);
                 toast.success('Role created successfully');
+                router.flushAll(); // Clear prefetch cache to ensure fresh data on next visit
             },
             onError: (errors) => {
                 toast.error(errors.error || 'Failed to create role');
@@ -88,6 +89,7 @@ export default function Roles({ roles, permissions }: RolesPageProps) {
                 setIsEditDialogOpen(false);
                 setEditingRole(null);
                 toast.success('Role updated successfully');
+                router.flushAll(); // Clear prefetch cache to ensure fresh data on next visit
             },
             onError: (errors) => {
                 toast.error(errors.error || 'Failed to update role');
@@ -103,6 +105,7 @@ export default function Roles({ roles, permissions }: RolesPageProps) {
                 setIsDeleteDialogOpen(false);
                 setDeletingRole(null);
                 toast.success('Role deleted successfully');
+                router.flushAll(); // Clear prefetch cache to ensure fresh data on next visit
             },
             onError: (errors) => {
                 toast.error(errors.error || 'Failed to delete role');

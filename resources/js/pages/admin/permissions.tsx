@@ -17,7 +17,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import { Paginator, type BreadcrumbItem, Permission } from '@/types';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
@@ -62,6 +62,7 @@ export default function Permissions({ permissions }: PermissionsPageProps) {
                 setIsCreateDialogOpen(false);
                 createForm.reset();
                 toast.success('Permission created successfully');
+                router.flushAll(); // Clear prefetch cache to ensure fresh data on next visit
             },
             onError: (errors) => {
                 toast.error(errors.error || 'Failed to create permission');
@@ -79,6 +80,7 @@ export default function Permissions({ permissions }: PermissionsPageProps) {
                 setEditingPermission(null);
                 editForm.reset();
                 toast.success('Permission updated successfully');
+                router.flushAll(); // Clear prefetch cache to ensure fresh data on next visit
             },
             onError: (errors) => {
                 toast.error(errors.error || 'Failed to update permission');
@@ -94,6 +96,7 @@ export default function Permissions({ permissions }: PermissionsPageProps) {
                 setIsDeleteDialogOpen(false);
                 setDeletingPermission(null);
                 toast.success('Permission deleted successfully');
+                router.flushAll(); // Clear prefetch cache to ensure fresh data on next visit
             },
             onError: (errors) => {
                 toast.error(errors.error || 'Failed to delete permission');

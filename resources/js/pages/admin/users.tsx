@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -103,6 +103,7 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
         setShouldResetCreateForm(true);
         setIsCreateDialogOpen(false);
         toast.success('User created successfully');
+        router.flushAll(); // Clear prefetch cache to ensure fresh data on next visit
       },
       onError: (errors) => {
         toast.error(errors.error || 'Failed to create user');
@@ -121,6 +122,7 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
         setIsEditDialogOpen(false);
         setEditingUser(null);
         toast.success('User updated successfully');
+        router.flushAll(); // Clear prefetch cache to ensure fresh data on next visit
       },
       onError: (errors) => {
         toast.error(errors.error || 'Failed to update user');
@@ -136,6 +138,7 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
         setIsDeleteDialogOpen(false);
         setDeletingUser(null);
         toast.success('User deleted successfully');
+        router.flushAll(); // Clear prefetch cache to ensure fresh data on next visit
       },
       onError: (errors) => {
         toast.error(errors.error || 'Failed to delete user');

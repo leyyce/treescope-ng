@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -104,6 +104,7 @@ export default function TreeSpeciesPage({ treeSpecies, filters }: TreeSpeciesPag
         setShouldResetCreateForm(true);
         setIsCreateDialogOpen(false);
         toast.success('Tree species created successfully');
+        router.flushAll();
       },
       onError: (errors) => {
         toast.error(errors.error || 'Failed to create tree species');
@@ -121,6 +122,7 @@ export default function TreeSpeciesPage({ treeSpecies, filters }: TreeSpeciesPag
         setIsEditDialogOpen(false);
         setEditingTreeSpecies(null);
         toast.success('Tree species updated successfully');
+        router.flushAll();
       },
       onError: (errors) => {
         toast.error(errors.error || 'Failed to update tree species');
@@ -136,6 +138,7 @@ export default function TreeSpeciesPage({ treeSpecies, filters }: TreeSpeciesPag
         setIsDeleteDialogOpen(false);
         setDeletingTreeSpecies(null);
         toast.success('Tree species deleted successfully');
+        router.flushAll();
       },
       onError: (errors) => {
         toast.error(errors.error || 'Failed to delete tree species');
