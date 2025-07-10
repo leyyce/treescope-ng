@@ -1,5 +1,7 @@
 import AppLogoIcon from './app-logo-icon';
 import { useSidebar } from './ui/sidebar';
+import { usePanelView } from '@/contexts/panel-view-context';
+import { router } from '@inertiajs/react';
 
 interface AppLogoProps {
     panelLabel?: string;
@@ -7,14 +9,27 @@ interface AppLogoProps {
 
 export default function AppLogo({ panelLabel }: AppLogoProps = {}) {
     const { open } = useSidebar();
+    const { accessibleMainNavItems } = usePanelView();
+
+    const handleClick = () => {
+        if (accessibleMainNavItems.length > 0) {
+            router.visit(accessibleMainNavItems[0].href);
+        }
+    };
 
     return (
         <>
-            <div className="flex aspect-square size-8 items-center justify-center rounded-md text-sidebar-primary-foreground">
+            <div
+                className="flex aspect-square size-8 items-center justify-center rounded-md text-sidebar-primary-foreground cursor-pointer"
+                onClick={handleClick}
+            >
                 <AppLogoIcon className="size-5 fill-current text-white dark:text-black" />
             </div>
             {open && (
-                <div className="ml-1 grid flex-1 text-left text-sm">
+                <div
+                    className="ml-1 grid flex-1 text-left text-sm select-none cursor-pointer"
+                    onClick={handleClick}
+                >
                     <span className="mb-0.5 truncate leading-tight font-semibold">TreeScope</span>
                     {panelLabel && (
                         <span className="text-xs text-muted-foreground truncate">{panelLabel}</span>
