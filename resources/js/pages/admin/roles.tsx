@@ -71,8 +71,8 @@ export default function Roles({ roles, permissions }: RolesPageProps) {
                 setIsCreateDialogOpen(false);
                 toast.success('Role created successfully');
             },
-            onError: () => {
-                toast.error('Failed to create role');
+            onError: (errors) => {
+                toast.error(errors.error || 'Failed to create role');
             },
         });
     };
@@ -89,8 +89,8 @@ export default function Roles({ roles, permissions }: RolesPageProps) {
                 setEditingRole(null);
                 toast.success('Role updated successfully');
             },
-            onError: () => {
-                toast.error('Failed to update role');
+            onError: (errors) => {
+                toast.error(errors.error || 'Failed to update role');
             },
         });
     };
@@ -244,20 +244,25 @@ export default function Roles({ roles, permissions }: RolesPageProps) {
                                 roles.data.map((role) => (
                                     <TableRow key={role.id}>
                                         <TableCell>{role.name}</TableCell>
-                                        <TableCell>
-                                            <div className="flex flex-wrap gap-1">
-                                                {role.permissions?.map((permission) => (
-                                                    <Badge key={permission.id} variant="outline">
-                                                        {permission.name}
-                                                    </Badge>
-                                                ))}
-                                            </div>
-                                        </TableCell>
+                                        {
+                                            role.name === 'Super Admin' ?
+                                                <TableCell>This role automatically has all permissions</TableCell>
+                                                :
+                                                <TableCell>
+                                                    <div className="flex flex-wrap gap-1">
+                                                        {role.permissions?.map((permission) => (
+                                                            <Badge key={permission.id} variant="outline">
+                                                                {permission.name}
+                                                            </Badge>
+                                                        ))}
+                                                    </div>
+                                                </TableCell>
+                                        }
                                         <TableCell>{new Date(role.created_at).toLocaleString()}</TableCell>
                                         <TableCell>{new Date(role.updated_at).toLocaleString()}</TableCell>
                                         <TableCell>
                                             <div className="flex space-x-2">
-                                                {hasPermissions('edit role') && (
+                                                {(hasPermissions('edit role') && role.name !== 'Super Admin') && (
                                                     <Button variant="outline" size="sm" onClick={() => openEditDialog(role)}>
                                                         <Pencil className="h-4 w-4" />
                                                         <span className="sr-only">Edit</span>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
@@ -40,14 +41,22 @@ class HandleInertiaRequests extends Middleware
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
+        $roles = $request->user() ? $request->user()->getRoleNames() : collect(['Guest']);
+
+        if (in_array('Super Admin', $roles->toArray())) {
+            $permissions = Permission::all()->pluck('name');
+        } else {
+            $permissions = $request->user() ? $request->user()->getAllPermissions()->pluck('name') : Role::findByName('Guest')?->getPermissionNames() ?? collect();
+        }
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
                 'user' => $request->user(),
-                'roles' => $request->user() ? $request->user()->getRoleNames() : ['Guest'],
-                'permissions' => $request->user() ? $request->user()->getAllPermissions()->pluck('name') : Role::findByName('Guest')?->getPermissionNames() ?? [],
+                'roles' => $roles,
+                'permissions' => $permissions,
             ],
             'ziggy' => fn(): array => [
                 ...(new Ziggy)->toArray(),

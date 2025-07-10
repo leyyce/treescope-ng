@@ -102,8 +102,8 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
         setIsCreateDialogOpen(false);
         toast.success('User created successfully');
       },
-      onError: () => {
-        toast.error('Failed to create user');
+      onError: (errors) => {
+        toast.error(errors.error || 'Failed to create user');
       },
     });
   };
@@ -120,8 +120,8 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
         setEditingUser(null);
         toast.success('User updated successfully');
       },
-      onError: () => {
-        toast.error('Failed to update user');
+      onError: (errors) => {
+        toast.error(errors.error || 'Failed to update user');
       },
     });
   };

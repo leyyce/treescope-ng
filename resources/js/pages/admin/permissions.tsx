@@ -63,8 +63,8 @@ export default function Permissions({ permissions }: PermissionsPageProps) {
                 createForm.reset();
                 toast.success('Permission created successfully');
             },
-            onError: () => {
-                toast.error('Failed to create permission');
+            onError: (errors) => {
+                toast.error(errors.error || 'Failed to create permission');
             },
         });
     };
@@ -80,8 +80,8 @@ export default function Permissions({ permissions }: PermissionsPageProps) {
                 editForm.reset();
                 toast.success('Permission updated successfully');
             },
-            onError: () => {
-                toast.error('Failed to update permission');
+            onError: (errors) => {
+                toast.error(errors.error || 'Failed to update permission');
             },
         });
     };

@@ -63,6 +63,10 @@ class RoleController extends Controller
             'permissions' => 'array',
         ]);
 
+        if ($role->name === 'Super Admin') {
+            return back()->withErrors(['error' => 'Cannot edit Super Admin role.']);
+        }
+
         $role->update([
             'name' => $validated['name'],
         ]);
@@ -81,7 +85,7 @@ class RoleController extends Controller
     {
         // Check if any users are using the role
         if ($role->users()->count() > 0) {
-            return redirect()->route('admin.roles')->with('error', 'Cannot delete role as it is assigned to one or more users.');
+            return back()->withErrors(['error' => 'Cannot delete role as it is assigned to one or more users.']);
         }
 
         // Prevent deleting system roles
