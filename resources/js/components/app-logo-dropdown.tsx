@@ -6,21 +6,42 @@ import AppLogo from './app-logo';
 import { usePanelView } from '@/contexts/panel-view-context';
 import { router } from '@inertiajs/react';
 import { useSidebar } from './ui/sidebar';
+import { usePermissions } from '@/hooks/use-permissions';
 
 export default function AppLogoDropdown() {
   const { setCurrentView, accessibleViews, currentView } = usePanelView();
   const { open } = useSidebar();
+  const { hasPermissions, hasRoles, hasMixed } = usePermissions();
 
   const handleViewChange = (viewId: string) => {
     // Only proceed if this is a different view
     if (viewId !== currentView.id) {
-      // Set the current view by ID (the context will handle persistence)
-      setCurrentView(viewId);
-
-      // Find the view to navigate to its first item
+      // Find the new view from accessible views
       const newView = accessibleViews.find(view => view.id === viewId);
-      if (newView && newView.mainNavItems.length > 0) {
-        router.visit(newView.mainNavItems[0].href);
+
+      if (newView) {
+        // Set the current view by ID (the context will handle persistence)
+        setCurrentView(viewId);
+
+        // Get the accessible nav items from the new view directly
+        const newViewNavItems = newView.mainNavItems.filter(item => {
+          // Check if the user has the required permissions for this nav item
+          const accessibleByPermission = hasPermissions(item.requiredPermissions);
+
+          // Check if the user has the required roles for this nav item
+          const accessibleByRole = hasRoles(item.requiredRoles);
+
+          // Check if the user has the required mixed permissions/roles for this nav item
+          const accessibleByMixed = hasMixed(item.requiredMixed);
+
+          // The item is accessible only if all checks pass
+          return accessibleByPermission && accessibleByRole && accessibleByMixed;
+        });
+
+        // Navigate to the first accessible item in the new view
+        if (newViewNavItems.length > 0) {
+          router.visit(newViewNavItems[0].href);
+        }
       }
     }
   };

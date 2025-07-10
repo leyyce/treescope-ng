@@ -4,11 +4,12 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { usePanelView } from '@/contexts/panel-view-context';
 import AppLogoDropdown from './app-logo-dropdown';
+import AppLogo from '@/components/app-logo';
 
 // Navigation items are now managed by the dashboard view context
 
 export function AppSidebar() {
-    const { currentView } = usePanelView();
+    const { currentView, accessibleViews, accessibleMainNavItems } = usePanelView();
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -17,7 +18,7 @@ export function AppSidebar() {
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
                             <div>
-                                <AppLogoDropdown />
+                                {accessibleViews.length === 1 ? <AppLogo /> : <AppLogoDropdown />}
                             </div>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -25,7 +26,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={currentView.mainNavItems} />
+                <NavMain items={accessibleMainNavItems}/>
             </SidebarContent>
 
             <SidebarFooter>
