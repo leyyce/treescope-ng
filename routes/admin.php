@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
@@ -7,9 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::middleware(['auth', 'verified', 'permission:access admin panel'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('admin/dashboard');
-    })->name('dashboard')->middleware(['permission:view admin dashboard']);
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware(['permission:view admin dashboard']);
 
     // User routes
     Route::get('/users', [UserController::class, 'index'])->name('users')->middleware(['permission:view users']);

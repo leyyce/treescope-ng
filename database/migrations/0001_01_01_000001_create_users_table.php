@@ -37,6 +37,7 @@ return new class extends Migration {
             $table->unsignedInteger('step_length');
             $table->unsignedInteger('xp')->default(0);
             $table->rememberToken();
+            $table->timestamp('last_activity')->nullable();
             $table->timestamps();
         });
 
