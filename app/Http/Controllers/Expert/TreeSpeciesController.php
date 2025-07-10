@@ -34,12 +34,7 @@ class TreeSpeciesController extends Controller
             'treeSpecies' => $treeSpecies,
             'filters' => [
                 'search' => $search,
-            ],
-            'can' => [
-                'create' => Auth::user()->can('create tree species'),
-                'edit' => Auth::user()->can('edit tree species'),
-                'delete' => Auth::user()->can('delete tree species'),
-            ],
+            ]
         ]);
     }
 

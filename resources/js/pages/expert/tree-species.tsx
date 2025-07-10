@@ -36,16 +36,12 @@ import {
 import { Plus, Pencil, Trash2, Search, Eye } from 'lucide-react';
 import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
+import { usePermissions } from '@/hooks/use-permissions';
 
 interface TreeSpeciesPageProps {
   treeSpecies: Paginator<TreeSpecies>;
   filters: {
     search: string;
-  };
-  can: {
-    create: boolean;
-    edit: boolean;
-    delete: boolean;
   };
 }
 
@@ -60,7 +56,8 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
-export default function TreeSpeciesPage({ treeSpecies, filters, can }: TreeSpeciesPageProps) {
+export default function TreeSpeciesPage({ treeSpecies, filters }: TreeSpeciesPageProps) {
+    const { hasPermissions } = usePermissions();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [editingTreeSpecies, setEditingTreeSpecies] = useState<TreeSpecies | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -200,7 +197,7 @@ export default function TreeSpeciesPage({ treeSpecies, filters, can }: TreeSpeci
                 <Search className="h-4 w-4" />
               </Button>
             </form>
-            {can.create && (
+            {hasPermissions('create tree species') && (
               <Dialog
                 open={isCreateDialogOpen}
                 onOpenChange={(open) => {
@@ -432,16 +429,18 @@ export default function TreeSpeciesPage({ treeSpecies, filters, can }: TreeSpeci
                     <TableCell>{new Date(species.updated_at).toLocaleString()}</TableCell>
                     <TableCell>
                       <div className="flex space-x-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => openViewDialog(species)}
-                          className="md:hidden"
-                        >
-                          <Eye className="h-4 w-4" />
-                          <span className="sr-only">View Details</span>
-                        </Button>
-                        {can.edit && (
+                          {hasPermissions('view tree species') && (
+                              <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => openViewDialog(species)}
+                                  className="md:hidden"
+                              >
+                                  <Eye className="h-4 w-4" />
+                                  <span className="sr-only">View Details</span>
+                              </Button>
+                          )}
+                        {hasPermissions('edit tree species') && (
                           <Button
                             variant="outline"
                             size="sm"
@@ -451,7 +450,7 @@ export default function TreeSpeciesPage({ treeSpecies, filters, can }: TreeSpeci
                             <span className="sr-only">Edit</span>
                           </Button>
                         )}
-                        {can.delete && (
+                        {hasPermissions('delete tree species') && (
                           <Button
                             variant="outline"
                             size="sm"

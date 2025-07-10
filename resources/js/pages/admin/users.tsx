@@ -33,7 +33,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Plus, Pencil, Trash2, Search } from 'lucide-react';
+import { Plus, Pencil, Trash2, Search, Eye } from 'lucide-react';
 import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
 import { Badge } from '@/components/ui/badge';
@@ -65,6 +65,8 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [deletingUser, setDeletingUser] = useState<User | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [viewingUser, setViewingUser] = useState<User | null>(null);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [shouldResetCreateForm, setShouldResetCreateForm] = useState(false);
   const [shouldResetEditForm, setShouldResetEditForm] = useState(false);
 
@@ -159,6 +161,11 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
   const openDeleteDialog = (user: User) => {
     setDeletingUser(user);
     setIsDeleteDialogOpen(true);
+  };
+
+  const openViewDialog = (user: User) => {
+    setViewingUser(user);
+    setIsViewDialogOpen(true);
   };
 
   const handleSearch = (e: React.FormEvent) => {
@@ -410,6 +417,16 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
                     <TableCell>{new Date(user.updated_at).toLocaleString()}</TableCell>
                     <TableCell>
                       <div className="flex space-x-2">
+                          {hasPermissions('view users') && (
+                              <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => openViewDialog(user)}
+                              >
+                                  <Eye className="h-4 w-4" />
+                                  <span className="sr-only">View Details</span>
+                              </Button>
+                          )}
                         {hasPermissions('edit user') && (
                           <Button
                             variant="outline"
@@ -609,6 +626,78 @@ export default function Users({ users, roles, filters }: UsersPageProps) {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        {/* View Details Dialog */}
+        <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>User Details</DialogTitle>
+              <DialogDescription>
+                Viewing details for user {viewingUser?.username}.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <h3 className="font-medium">Username</h3>
+                  <p>{viewingUser?.username}</p>
+                </div>
+                <div>
+                  <h3 className="font-medium">Email</h3>
+                  <p>{viewingUser?.email}</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <h3 className="font-medium">First Name</h3>
+                  <p>{viewingUser?.first_name}</p>
+                </div>
+                <div>
+                  <h3 className="font-medium">Last Name</h3>
+                  <p>{viewingUser?.last_name}</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <h3 className="font-medium">Step Length</h3>
+                  <p>{viewingUser?.step_length} cm</p>
+                </div>
+                <div>
+                  <h3 className="font-medium">Email Verified</h3>
+                  <p>{viewingUser?.email_verified_at ? "Yes" : "No"}</p>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-medium">Roles</h3>
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {viewingUser?.roles?.map((role) => (
+                    <Badge key={role.id} variant="outline">
+                      {role.name}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <h3 className="font-medium">Registered At</h3>
+                  <p>{viewingUser ? new Date(viewingUser.created_at).toLocaleString() : ''}</p>
+                </div>
+                <div>
+                  <h3 className="font-medium">Last Updated</h3>
+                  <p>{viewingUser ? new Date(viewingUser.updated_at).toLocaleString() : ''}</p>
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button
+                type="button"
+                onClick={() => setIsViewDialogOpen(false)}
+              >
+                Close
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </AppLayout>
   );
