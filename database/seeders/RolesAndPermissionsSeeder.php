@@ -79,7 +79,13 @@ class RolesAndPermissionsSeeder extends Seeder
             'delete measurement', 'access user panel', 'view user dashboard', 'access expert panel', 'view expert dashboard', 'create tree species', 'edit tree species', 'delete tree species');
 
         $role = Role::create(['name' => 'Admin']);
-        $role->givePermissionTo(Permission::all());
+        $role->givePermissionTo('view tree map', 'view validated tree', 'view unvalidated tree', 'create tree',
+            'edit own unvalidated tree', 'delete own unvalidated tree', 'view validated measurement', 'view unvalidated measurement', 'create measurement', 'edit own unvalidated measurement',
+            'delete own unvalidated measurement', 'access user panel', 'view user dashboard', 'access admin panel', 'view admin dashboard',
+            'view users', 'create user', 'edit user', 'delete user',
+            'view roles', 'create role', 'edit role', 'delete role',
+            'view permissions', 'create permission', 'edit permission', 'delete permission',
+        );
 
         $role = Role::create(['name' => 'Super Admin']); // Always has every permission
         $role->givePermissionTo(Permission::all());
