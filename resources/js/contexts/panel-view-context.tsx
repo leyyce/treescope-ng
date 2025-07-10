@@ -179,6 +179,7 @@ interface PanelViewContextType {
     availableViews: PanelView[];
     accessibleViews: PanelView[];
     accessibleMainNavItems: NavItem[];
+    accessibleFooterNavItems: NavItem[] | undefined;
     registerView: (view: PanelView) => void;
     unregisterView: (viewId: string) => void;
 }
@@ -242,7 +243,26 @@ export function PanelViewProvider({ children }: PanelViewProviderProps) {
                 roles
             )
             return accessibleByPermission && accessibleByRole && accessibleByMixed;
-        }) ?? []
+        })
+    }, [currentView, permissions, roles]);
+
+    const accessibleFooterNavItems = useMemo((): NavItem[] | undefined => {
+        return currentView.footerNavItems?.filter((item) => {
+            const accessibleByPermission = checkPermissions(
+                item.requiredPermissions,
+                permissions
+            );
+            const accessibleByRole = checkRoles(
+                item.requiredRoles,
+                roles
+            );
+            const accessibleByMixed = checkMixed(
+                item.requiredMixed,
+                permissions,
+                roles
+            )
+            return accessibleByPermission && accessibleByRole && accessibleByMixed;
+        })
     }, [currentView, permissions, roles]);
 
     // Suggest a view based on the current URL if no view is selected
@@ -280,6 +300,7 @@ export function PanelViewProvider({ children }: PanelViewProviderProps) {
                 availableViews: registry.getAllViews(),
                 accessibleViews,
                 accessibleMainNavItems,
+                accessibleFooterNavItems,
                 registerView,
                 unregisterView,
             }}

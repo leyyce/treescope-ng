@@ -9,7 +9,7 @@ import AppLogo from '@/components/app-logo';
 // Navigation items are now managed by the dashboard view context
 
 export function AppSidebar() {
-    const { currentView, accessibleViews, accessibleMainNavItems } = usePanelView();
+    const { accessibleViews, accessibleMainNavItems, accessibleFooterNavItems } = usePanelView();
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -30,8 +30,8 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                {currentView.footerNavItems && (
-                    <NavFooter items={currentView.footerNavItems} className="mt-auto" />
+                {accessibleFooterNavItems && (
+                    <NavFooter items={accessibleFooterNavItems} className="mt-auto" />
                 )}
                 <NavUser />
             </SidebarFooter>
