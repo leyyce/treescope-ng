@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Permission\Models\Role as SpatieRole;
 
 /**
- * 
+ *
  *
  * @property string $id
  * @property string $name
@@ -34,4 +34,43 @@ class Role extends SpatieRole
 {
     /** @use HasFactory<\Database\Factories\RoleFactory> */
     use HasFactory, HasUuids;
+
+    /**
+     * Grant the given permission(s) to a role.
+     *
+     * @param  string|int|array|\Spatie\Permission\Contracts\Permission|\Illuminate\Support\Collection|\BackedEnum  $permissions
+     * @return $this
+     */
+    public function givePermissionTo(...$permissions): static
+    {
+        $result = parent::givePermissionTo(...$permissions);
+        $this->touch();
+        return $result;
+    }
+
+    /**
+     * Remove all current permissions and set the given ones.
+     *
+     * @param  string|int|array|\Spatie\Permission\Contracts\Permission|\Illuminate\Support\Collection|\BackedEnum  $permissions
+     * @return $this
+     */
+    public function syncPermissions(...$permissions): static
+    {
+        $result = parent::syncPermissions(...$permissions);
+        $this->touch();
+        return $result;
+    }
+
+    /**
+     * Revoke the given permission(s).
+     *
+     * @param  \Spatie\Permission\Contracts\Permission|\Spatie\Permission\Contracts\Permission[]|string|string[]|\BackedEnum  $permission
+     * @return $this
+     */
+    public function revokePermissionTo($permission): static
+    {
+        $result = parent::revokePermissionTo($permission);
+        $this->touch();
+        return $result;
+    }
 }
