@@ -393,6 +393,13 @@ export default function TreeSpeciesPage({ treeSpecies, filters, can }: TreeSpeci
                 <TableHead>Name</TableHead>
                 <TableHead>Scientific Name</TableHead>
                 <TableHead>Description</TableHead>
+                <TableHead className="hidden md:table-cell">A</TableHead>
+                <TableHead className="hidden md:table-cell">B</TableHead>
+                <TableHead className="hidden md:table-cell">C</TableHead>
+                <TableHead className="hidden md:table-cell">D</TableHead>
+                <TableHead className="hidden md:table-cell">E</TableHead>
+                <TableHead className="hidden md:table-cell">F</TableHead>
+                <TableHead className="hidden md:table-cell">G</TableHead>
                 <TableHead>Created At</TableHead>
                 <TableHead>Updated At</TableHead>
                 <TableHead className="w-[150px]">Actions</TableHead>
@@ -401,7 +408,10 @@ export default function TreeSpeciesPage({ treeSpecies, filters, can }: TreeSpeci
             <TableBody>
               {treeSpecies.data.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8">
+                  <TableCell colSpan={6} className="text-center py-8 md:hidden">
+                    No tree species found
+                  </TableCell>
+                  <TableCell colSpan={13} className="text-center py-8 hidden md:table-cell">
                     No tree species found
                   </TableCell>
                 </TableRow>
@@ -411,6 +421,13 @@ export default function TreeSpeciesPage({ treeSpecies, filters, can }: TreeSpeci
                     <TableCell className="font-medium">{species.name}</TableCell>
                     <TableCell>{species.scientific_name || '-'}</TableCell>
                     <TableCell className="max-w-xs truncate">{species.description}</TableCell>
+                    <TableCell className="hidden md:table-cell">{species.a ?? '-'}</TableCell>
+                    <TableCell className="hidden md:table-cell">{species.b ?? '-'}</TableCell>
+                    <TableCell className="hidden md:table-cell">{species.c ?? '-'}</TableCell>
+                    <TableCell className="hidden md:table-cell">{species.d ?? '-'}</TableCell>
+                    <TableCell className="hidden md:table-cell">{species.e ?? '-'}</TableCell>
+                    <TableCell className="hidden md:table-cell">{species.f ?? '-'}</TableCell>
+                    <TableCell className="hidden md:table-cell">{species.g ?? '-'}</TableCell>
                     <TableCell>{new Date(species.created_at).toLocaleString()}</TableCell>
                     <TableCell>{new Date(species.updated_at).toLocaleString()}</TableCell>
                     <TableCell>
@@ -419,6 +436,7 @@ export default function TreeSpeciesPage({ treeSpecies, filters, can }: TreeSpeci
                           variant="outline"
                           size="sm"
                           onClick={() => openViewDialog(species)}
+                          className="md:hidden"
                         >
                           <Eye className="h-4 w-4" />
                           <span className="sr-only">View Details</span>
