@@ -33,7 +33,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Plus, Pencil, Trash2, Search } from 'lucide-react';
+import { Plus, Pencil, Trash2, Search, Eye } from 'lucide-react';
 import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
 
@@ -66,6 +66,8 @@ export default function TreeSpeciesPage({ treeSpecies, filters, can }: TreeSpeci
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [deletingTreeSpecies, setDeletingTreeSpecies] = useState<TreeSpecies | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [viewingTreeSpecies, setViewingTreeSpecies] = useState<TreeSpecies | null>(null);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [shouldResetCreateForm, setShouldResetCreateForm] = useState(false);
   const [shouldResetEditForm, setShouldResetEditForm] = useState(false);
 
@@ -164,6 +166,11 @@ export default function TreeSpeciesPage({ treeSpecies, filters, can }: TreeSpeci
   const openDeleteDialog = (species: TreeSpecies) => {
     setDeletingTreeSpecies(species);
     setIsDeleteDialogOpen(true);
+  };
+
+  const openViewDialog = (species: TreeSpecies) => {
+    setViewingTreeSpecies(species);
+    setIsViewDialogOpen(true);
   };
 
   const handleSearch = (e: React.FormEvent) => {
@@ -408,6 +415,14 @@ export default function TreeSpeciesPage({ treeSpecies, filters, can }: TreeSpeci
                     <TableCell>{new Date(species.updated_at).toLocaleString()}</TableCell>
                     <TableCell>
                       <div className="flex space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => openViewDialog(species)}
+                        >
+                          <Eye className="h-4 w-4" />
+                          <span className="sr-only">View Details</span>
+                        </Button>
                         {can.edit && (
                           <Button
                             variant="outline"
@@ -635,6 +650,85 @@ export default function TreeSpeciesPage({ treeSpecies, filters, can }: TreeSpeci
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        {/* View Details Dialog */}
+        <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Tree Species Details</DialogTitle>
+              <DialogDescription>
+                Viewing details for tree species.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <h3 className="font-medium">Name</h3>
+                <p className="text-sm">{viewingTreeSpecies?.name}</p>
+              </div>
+              <div className="grid gap-2">
+                <h3 className="font-medium">Scientific Name</h3>
+                <p className="text-sm">{viewingTreeSpecies?.scientific_name || '-'}</p>
+              </div>
+              <div className="grid gap-2">
+                <h3 className="font-medium">Description</h3>
+                <p className="text-sm whitespace-pre-wrap">{viewingTreeSpecies?.description}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <h3 className="font-medium">Parameter A</h3>
+                  <p className="text-sm">{viewingTreeSpecies?.a ?? '-'}</p>
+                </div>
+                <div className="grid gap-2">
+                  <h3 className="font-medium">Parameter B</h3>
+                  <p className="text-sm">{viewingTreeSpecies?.b ?? '-'}</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <h3 className="font-medium">Parameter C</h3>
+                  <p className="text-sm">{viewingTreeSpecies?.c ?? '-'}</p>
+                </div>
+                <div className="grid gap-2">
+                  <h3 className="font-medium">Parameter D</h3>
+                  <p className="text-sm">{viewingTreeSpecies?.d ?? '-'}</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <h3 className="font-medium">Parameter E</h3>
+                  <p className="text-sm">{viewingTreeSpecies?.e ?? '-'}</p>
+                </div>
+                <div className="grid gap-2">
+                  <h3 className="font-medium">Parameter F</h3>
+                  <p className="text-sm">{viewingTreeSpecies?.f ?? '-'}</p>
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <h3 className="font-medium">Parameter G</h3>
+                <p className="text-sm">{viewingTreeSpecies?.g ?? '-'}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <h3 className="font-medium">Created At</h3>
+                  <p className="text-sm">{viewingTreeSpecies ? new Date(viewingTreeSpecies.created_at).toLocaleString() : '-'}</p>
+                </div>
+                <div className="grid gap-2">
+                  <h3 className="font-medium">Updated At</h3>
+                  <p className="text-sm">{viewingTreeSpecies ? new Date(viewingTreeSpecies.updated_at).toLocaleString() : '-'}</p>
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsViewDialogOpen(false)}
+              >
+                Close
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </AppLayout>
   );
