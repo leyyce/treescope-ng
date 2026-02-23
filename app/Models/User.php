@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Notifications\QueuedPasswordReset;
+use App\Notifications\QueuedVerifyEmail;
 use App\Traits\HasRolesWithTimestampUpdate;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Clickbar\Magellan\Data\Geometries\Point;
@@ -136,5 +138,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function activities(): HasMany
     {
         return $this->hasMany(UserActivity::class);
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new QueuedPasswordReset($token));
+    }
+
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new QueuedVerifyEmail());
     }
 }
