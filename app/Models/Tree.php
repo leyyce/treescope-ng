@@ -11,8 +11,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 /**
- * 
- *
  * @property string $id
  * @property string $user_id
  * @property string $tree_species_id

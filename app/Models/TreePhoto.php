@@ -11,8 +11,6 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * 
- *
  * @property string $id
  * @property string $tree_measurement_id
  * @property string $user_id

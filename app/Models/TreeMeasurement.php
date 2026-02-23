@@ -9,12 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $tree_id
  * @property string $user_id
- * @property string $height
+ * @property numeric $height
  * @property int $inclination
  * @property int $trunk_diameter
  * @property string|null $note

@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Permission\Models\Role as SpatieRole;
 
 /**
- *
- *
  * @property string $id
  * @property string $name
  * @property string $guard_name
