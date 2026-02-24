@@ -15,7 +15,7 @@ RUN install-php-extensions \
     opcache
 
 # 2. Install Node.js & NPM (Required for Vite and JS build)
-RUN apt-get update && apt-get install -y nodejs npm \
+RUN apt-get update && apt-get install -y nodejs npm unzip zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # 3. Install Composer
