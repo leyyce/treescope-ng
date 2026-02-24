@@ -1,6 +1,32 @@
+# --- Git History (Reduces image size significantly) ---
+.git/
+.gitignore
+
+# --- Local Environment Secrets (CRITICAL SECURITY) ---
+# Never copy local .env files into the production image!
+.env
+.env.*
+
+# --- Dependencies (Will be installed fresh inside the container) ---
 /vendor/
 /node_modules/
+
+# --- Compiled Assets (Will be built inside the container) ---
 /public/build/
+/public/hot/
+
+# --- Local Caches & Sessions (Must not be transferred to the server) ---
 /bootstrap/cache/*.php
-.env
-.git/
+/storage/logs/
+/storage/framework/cache/
+/storage/framework/sessions/
+/storage/framework/views/
+/storage/framework/testing/
+
+# --- Local Docker Volumes & Data ---
+/.mailpit/
+pg_data_local/
+redis_data/
+
+# --- Local FrankenPHP Binary (If downloaded accidentally) ---
+frankenphp

@@ -1,4 +1,5 @@
 {
+    "name": "treescope-ng",
     "private": true,
     "type": "module",
     "scripts": {
