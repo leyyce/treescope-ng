@@ -7,12 +7,14 @@ import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, Tree } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
+import { usePermissions } from '@/hooks/use-permissions';
 
 interface TreemapProps {
     trees: Tree[];
 }
 
 export default function MapView({ trees }: TreemapProps) {
+    const { hasPermissions } = usePermissions();
     const [location, setLocation] = useState<
         | {
               lat: number;
@@ -51,37 +53,39 @@ export default function MapView({ trees }: TreemapProps) {
                                 Location
                             </Label>
                             <TreeMap value={location} onChange={handleLocationChange} trees={trees} className="mt-1 min-h-0 flex-1" />
-                            <div className="mt-4 flex justify-end">
-                                <TooltipProvider>
-                                    <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <div>
-                                                {location ? (
-                                                    <Button asChild>
-                                                        <Link
-                                                            href={route('trees.create', {
-                                                                lat: location.lat,
-                                                                lng: location.lng,
-                                                            })}
-                                                        >
+                            {hasPermissions('create tree') && (
+                                <div className="mt-4 flex justify-end">
+                                    <TooltipProvider>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <div>
+                                                    {location ? (
+                                                        <Button asChild>
+                                                            <Link
+                                                                href={route('trees.create', {
+                                                                    lat: location.lat,
+                                                                    lng: location.lng,
+                                                                })}
+                                                            >
+                                                                Create a Tree
+                                                            </Link>
+                                                        </Button>
+                                                    ) : (
+                                                        <Button disabled className="cursor-not-allowed opacity-50">
                                                             Create a Tree
-                                                        </Link>
-                                                    </Button>
-                                                ) : (
-                                                    <Button disabled className="cursor-not-allowed opacity-50">
-                                                        Create a Tree
-                                                    </Button>
-                                                )}
-                                            </div>
-                                        </TooltipTrigger>
-                                        {!location && (
-                                            <TooltipContent>
-                                                <p>Please select a location on the map first</p>
-                                            </TooltipContent>
-                                        )}
-                                    </Tooltip>
-                                </TooltipProvider>
-                            </div>
+                                                        </Button>
+                                                    )}
+                                                </div>
+                                            </TooltipTrigger>
+                                            {!location && (
+                                                <TooltipContent>
+                                                    <p>Please select a location on the map first</p>
+                                                </TooltipContent>
+                                            )}
+                                        </Tooltip>
+                                    </TooltipProvider>
+                                </div>
+                            )}
                         </div>
                     </CardContent>
                 </Card>
