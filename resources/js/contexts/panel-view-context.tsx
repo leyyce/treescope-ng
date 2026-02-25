@@ -74,6 +74,18 @@ export const panelViews: PanelView[] = [
                 requiredPermissions: 'view tree species',
             },
         ],
+        footerNavItems: [
+            {
+                title: 'Repository',
+                href: 'https://github.com/leyyce/treescope-ng/',
+                icon: Folder,
+            },
+            {
+                title: 'Documentation',
+                href: 'https://laravel.com/docs/starter-kits#react',
+                icon: BookOpen,
+            },
+        ],
         urlPatterns: ['/expert/*'],
         requiredPermissions: 'access expert panel',
     },
