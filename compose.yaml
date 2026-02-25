@@ -1,10 +1,24 @@
+# ==========================================
+# YAML Anchors (DRY Configuration)
+# ==========================================
+# We define the shared configuration for all Laravel-based services here
+# so we don't have to repeat ourselves in the app, worker, and scheduler.
+x-laravel-service: &laravel-service
+  build:
+    context: .
+    target: prod
+  restart: unless-stopped
+  env_file: .env
+  depends_on:
+    db:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+
 services:
   # --- The Webserver (FrankenPHP) ---
   app:
-    build:
-      context: .
-      target: prod
-    restart: unless-stopped
+    <<: *laravel-service
     ports:
       - "80:80"        # HTTP
       - "443:443"      # HTTPS (For Let's Encrypt Auto-SSL)
@@ -16,10 +30,6 @@ services:
       # OCTANE_HTTPS: "true"
       # Give this container the authority to run migrations and to run the octane startup command
       CONTAINER_ROLE: app
-    env_file: .env
-    depends_on:
-      - db
-      - redis
     volumes:
       - caddy_data:/data
       - caddy_config:/config
@@ -28,29 +38,15 @@ services:
 
   # --- The Queue Worker ---
   worker:
-    build:
-      context: .
-      target: prod
-    restart: unless-stopped
+    <<: *laravel-service
     command: php artisan queue:work --tries=3
-    env_file: .env
-    depends_on:
-      - db
-      - redis
     volumes:
       - ./storage/app/public:/app/storage/app/public
 
   # --- The Scheduler ---
   scheduler:
-    build:
-      context: .
-      target: prod
-    restart: unless-stopped
+    <<: *laravel-service
     command: php artisan schedule:work
-    env_file: .env
-    depends_on:
-      - db
-      - redis
 
   # --- PostGIS Database (Isolated, no exposed ports) ---
   db:
@@ -62,6 +58,11 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-treescope} -d ${DB_DATABASE:-treescope}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   # --- Redis (Isolated, no exposed ports) ---
   redis:
@@ -69,6 +70,11 @@ services:
     restart: unless-stopped
     volumes:
       - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   # --- Mailpit (UI restricted to localhost via SSH Tunnel) ---
   mailpit:
