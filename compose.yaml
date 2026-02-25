@@ -41,11 +41,17 @@ services:
     command: php artisan queue:work --tries=3
     volumes:
       - ./storage/app/public:/app/storage/app/public
+    healthcheck:
+      test: ["NONE"]
+      disable: true
 
   # --- The Scheduler ---
   scheduler:
     <<: *laravel-service
     command: php artisan schedule:work
+    healthcheck:
+      test: ["NONE"]
+      disable: true
 
   # --- PostGIS Database (Isolated, no exposed ports) ---
   db:

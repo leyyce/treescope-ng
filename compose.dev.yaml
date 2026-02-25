@@ -54,11 +54,17 @@ services:
   worker:
     <<: *laravel-service
     command: php artisan queue:work
+    healthcheck:
+      test: [ "NONE" ]
+      disable: true
 
   # --- Local Scheduler ---
   scheduler:
     <<: *laravel-service
     command: php artisan schedule:work
+    healthcheck:
+      test: [ "NONE" ]
+      disable: true
 
   # --- Local PostGIS Database ---
   db:
