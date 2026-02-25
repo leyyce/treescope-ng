@@ -7,6 +7,8 @@ x-laravel-service: &laravel-service
   build:
     context: .
     target: prod
+    args:
+      - VITE_APP_NAME=${VITE_APP_NAME:-TreeScope}
   restart: unless-stopped
   env_file: .env
   depends_on:
