@@ -60,7 +60,8 @@ RUN composer dump-autoload --optimize --no-dev --classmap-authoritative
 RUN npm install && npm run build
 
 # 6. Prepare Laravel directories and set basic permissions
-RUN chmod -R 775 storage bootstrap/cache
+RUN mkdir -p storage/framework/views storage/framework/cache/data storage/framework/sessions \
+    && chmod -R 775 storage bootstrap/cache
 
 # 7. Link storage for public access from the web
 RUN php artisan storage:link
