@@ -18,6 +18,9 @@ RUN install-php-extensions \
     zip \
     opcache
 
+# SECURITY: Hide PHP version from response headers
+RUN echo "expose_php = Off" > $PHP_INI_DIR/conf.d/99-hide-php.ini
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
