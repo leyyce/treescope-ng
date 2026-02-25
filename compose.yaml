@@ -33,8 +33,7 @@ services:
     volumes:
       - caddy_data:/data
       - caddy_config:/config
-      # Mount public storage so user uploads persist across container restarts
-      - ./storage/app/public:/app/storage/app/public
+      - treescope_pub:/app/storage/app/public
 
   # --- The Queue Worker ---
   worker:
@@ -89,6 +88,7 @@ services:
       MP_DATABASE: /data/mailpit.db
 
 volumes:
+  treescope_pub: {}
   pg_data: {}
   redis_data: {}
   caddy_data: {}
