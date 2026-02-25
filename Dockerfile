@@ -4,6 +4,10 @@
 FROM dunglas/frankenphp:php8.5 AS base
 
 # 1. Install system dependencies and PHP extensions
+# (Kept unzip and zip here as Composer needs them)
+RUN apt-get update && apt-get install -y unzip zip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 RUN install-php-extensions \
     pcntl \
     pdo_pgsql \
@@ -14,54 +18,66 @@ RUN install-php-extensions \
     zip \
     opcache
 
-# 2. Install Node.js & NPM (Required for Vite and JS build)
-RUN apt-get update && apt-get install -y nodejs npm unzip zip \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# 3. Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# 4. Set the default working directory
+# 2. Set the default working directory
 WORKDIR /app
 
 # ==========================================
-# STAGE 2: DEVELOPMENT (Local environment)
+# STAGE 2: FRONTEND ASSETS (Node Build)
+# ==========================================
+# We use a temporary Node image purely to compile Vite/React assets
+FROM node:20-alpine AS assets
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# ==========================================
+# STAGE 3: DEVELOPMENT (Local environment)
 # ==========================================
 FROM base AS dev
 
-# In development, we stay as the root user to avoid volume permission conflicts
-# between the host OS (Windows/Mac) and the Linux container.
-# Code is NOT copied here; it is mounted via docker-compose volumes for live-reloading.
+# Install Node in dev because Vite hot-reloading needs it
+RUN apt-get update && apt-get install -y nodejs npm \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Code is NOT copied here; it is mounted via docker-compose volumes
 # Tell FrankenPHP to use the Octane in-memory worker
-ENV FRANKENPHP_CONFIG="worker ./public/frankenphp-worker.php"
+# ENV FRANKENPHP_CONFIG="worker ./public/frankenphp-worker.php"
+ENTRYPOINT ["/app/docker/entrypoint.sh"]
 
 
 # ==========================================
-# STAGE 3: PRODUCTION (Server environment)
+# STAGE 4: PRODUCTION (Server environment)
 # ==========================================
 FROM base AS prod
 
-# 1. Leverage Docker layer caching: Copy ONLY composer files first
+# 1. Leverage Docker layer caching for Composer
 COPY composer.json composer.lock ./
-
-# 2. Install production dependencies (skipping dev tools like Faker/Pest)
-ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --no-dev --no-autoloader --no-scripts
 
-# 3. Copy the rest of the application code
-# (If code changes, Docker rebuilds from here, skipping the slow composer install above)
+# 2. Copy the rest of the application code
 COPY . .
+
+# 3. Copy the pre-built frontend assets from the Node stage
+COPY --from=assets /app/public/build /app/public/build
 
 # 4. Finish Composer optimization
 RUN composer dump-autoload --optimize --no-dev --classmap-authoritative
 
-# 5. Build Frontend Assets (Vite/React)
-RUN npm install && npm run build
+# 5. Prepare Laravel directories and set basic permissions
+RUN mkdir -p storage/framework/views storage/framework/cache/data storage/framework/sessions storage/logs \
+    && chmod -R 775 storage bootstrap/cache \
+    && chmod +x docker/entrypoint.sh
 
-# 6. Prepare Laravel directories and set basic permissions
-RUN mkdir -p storage/framework/views storage/framework/cache/data storage/framework/sessions \
-    && chmod -R 775 storage bootstrap/cache
+# 6. Pre-compile Laravel code for maximum runtime speed
+# (We intentionally skip config:cache here because runtime .env vars are missing during build)
+RUN php artisan view:cache \
+    && php artisan route:cache \
+    && php artisan event:cache
 
 # 7. Link storage for public access from the web
 RUN php artisan storage:link
@@ -69,19 +85,24 @@ RUN php artisan storage:link
 # 8. Generate the Octane Worker file
 RUN php artisan octane:install --server=frankenphp -n
 
-# 9. SECURITY: Remove Composer so it cannot be abused if the container is compromised
+# 9. SECURITY: Remove Composer
 RUN rm /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=0
 
-# 10. SECURITY: Create a non-root user and grant specific network capabilities
+# 10. SECURITY: Create a non-root user and fix volume permissions
 ARG USER=treescope
 RUN useradd ${USER} \
-    # Allow the non-root user to bind to privileged ports (80/443) \
     && setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/frankenphp \
-    # Transfer ownership of the application and webserver config to the non-root user \
-    && chown -R ${USER}:${USER} /app /config/caddy /data/caddy
+    # Ensure the non-root user owns the root of the data/config mounts to prevent Caddy permission errors \
+    && chown -R ${USER}:${USER} /app /config /data
 
 # 11. Switch context to the non-root user for all subsequent operations
 USER ${USER}
 
 # 12. Tell FrankenPHP to use the Octane in-memory worker
-ENV FRANKENPHP_CONFIG="worker ./public/frankenphp-worker.php"
+# ENV FRANKENPHP_CONFIG="worker ./public/frankenphp-worker.php"
+
+# 13. Delegate runtime initialization to our custom script
+ENTRYPOINT ["/app/docker/entrypoint.sh"]
+
+# CMD ["php", "artisan", "octane:frankenphp", "--port=443", "--https", "--http-redirect"]
