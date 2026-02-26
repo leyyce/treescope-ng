@@ -23,7 +23,8 @@ if [ "$CONTAINER_ROLE" = "app" ]; then
         --host="${APP_HOST_NAME}" \
         --port="${OCTANE_PORT:-443}" \
         --https \
-        --http-redirect
+        --http-redirect \
+        --caddyfile="/app/Caddyfile"
 fi
 
 # Worker / Scheduler roles fall through to their compose `command:`

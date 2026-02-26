@@ -6,7 +6,7 @@ use Inertia\Inertia;
 Route::middleware(['auth', 'verified', 'permission:access expert panel'])->prefix('expert')->name('expert.')->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('expert/dashboard');
-    })->name('dashboard')->middleware(['permission:view admin dashboard']);
+    })->name('dashboard')->middleware(['permission:view expert dashboard']);
 
     // Tree Species routes
     Route::get('/tree-species', [TreeSpeciesController::class, 'index'])->name('tree-species')->middleware(['permission:view tree species']);

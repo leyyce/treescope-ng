@@ -1,0 +1,25 @@
+{
+    # Tell Caddy to use the Octane Worker
+    frankenphp {
+        worker /app/public/frankenphp-worker.php
+    }
+    # Ensure PHP processes before static files
+    order php_server before file_server
+}
+
+# Caddy will automatically fetch an SSL cert and redirect HTTP to HTTPS for this host
+{$APP_HOST_NAME} {
+    root * /app/public
+
+    # Compress responses for better performance
+    encode zstd br gzip
+
+    # SECURITY: Enforce HSTS natively at the server edge!
+    header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+    # Serve static assets (like Vite build files) directly without hitting PHP
+    file_server
+
+    # Send everything else to Laravel
+    php_server
+}
